@@ -8,6 +8,11 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// API routes
+app.get('/api/health', (_req, res) => {
+  res.json({ status: 'ok' });
+});
+
 // In production, __dirname is dist/, in dev it's src/
 // Static files are always in dist/public (built by client)
 const publicPath = path.join(__dirname, 'public');
@@ -33,3 +38,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+export { app };
