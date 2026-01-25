@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="package-card"
-    :class="{ selected }"
-    @click="$emit('click')"
-  >
+  <div class="package-card" :class="{ selected }" @click="$emit('click')">
     <div class="package-header">
       <div class="package-name">{{ package.name }}</div>
       <span class="package-type" :class="`type-${package.type}`">
@@ -14,12 +10,8 @@
     <div class="package-details">
       <div><strong>Framework:</strong> {{ package.framework }}</div>
       <div><strong>Build Tool:</strong> {{ package.buildTool }}</div>
-      <div v-if="package.nodeVersion">
-        <strong>Node:</strong> {{ package.nodeVersion }}
-      </div>
-      <div v-if="package.hasDatabase">
-        <strong>Database:</strong> {{ package.databaseType }}
-      </div>
+      <div v-if="package.nodeVersion"><strong>Node:</strong> {{ package.nodeVersion }}</div>
+      <div v-if="package.hasDatabase"><strong>Database:</strong> {{ package.databaseType }}</div>
     </div>
 
     <div v-if="package.latestDeployment" class="deployment-stats">
@@ -57,7 +49,7 @@
       Total Deployments: {{ package.deploymentCount }}
     </div>
 
-    <div class="click-hint" v-if="!selected">Click to view deployment options</div>
+    <div v-if="!selected" class="click-hint">Click to view deployment options</div>
   </div>
 </template>
 

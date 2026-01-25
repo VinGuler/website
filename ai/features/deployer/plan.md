@@ -7,6 +7,7 @@ A local web application for deploying monorepo packages to production hosting ve
 ## Current Implementation ✅
 
 ### Core Infrastructure
+
 - ✅ Project structure setup (`/deployer/app`)
 - ✅ TypeScript configuration
 - ✅ Data persistence layer (JSON-based)
@@ -15,6 +16,7 @@ A local web application for deploying monorepo packages to production hosting ve
 - ✅ Type definitions
 
 ### Services Implemented
+
 - ✅ **Scanner Service** - Scans `/packages` directory
 - ✅ **Analyzer Service** - Detects package type, framework, build tool
 - ✅ **Planner Service** - Generates deployment recommendations with vendor options
@@ -23,6 +25,7 @@ A local web application for deploying monorepo packages to production hosting ve
 - ✅ **Vendor Adapters** - Vercel, Railway, Netlify, Render
 
 ### API Endpoints
+
 - ✅ `GET /api/scan` - Scan and analyze packages
 - ✅ `GET /api/packages` - Get all packages with deployment stats
 - ✅ `GET /api/deployment-plan` - Get deployment plans for packages
@@ -31,12 +34,14 @@ A local web application for deploying monorepo packages to production hosting ve
 - ✅ `GET /api/deployments` - Get all deployment history
 
 ### Data Models
+
 - ✅ **SavedPackage** - Package info with deployment stats (deploymentCount, lastDeployedAt)
 - ✅ **DeploymentRecord** - Full deployment history with logs, status, timestamps
 - ✅ **DeploymentOption** - Vendor options with cost estimates and features
 - ✅ **DeploymentConfig** - User-selected vendor and configuration
 
 ### Features
+
 - ✅ Package scanning and classification
 - ✅ Multi-vendor support (6 vendors)
 - ✅ Deployment plan generation with multiple options per package
@@ -48,6 +53,7 @@ A local web application for deploying monorepo packages to production hosting ve
 ## Next Development Priorities
 
 ### Frontend UI (In Progress)
+
 The backend is complete, but the frontend needs implementation:
 
 1. **Dashboard Page**
@@ -89,6 +95,7 @@ The backend is complete, but the frontend needs implementation:
 ### Future Enhancements
 
 #### Advanced Features
+
 - [ ] **Real-time deployment streaming** (SSE or WebSockets)
 - [ ] **Deployment rollback** capability
 - [ ] **Environment variable templates** per vendor
@@ -97,12 +104,14 @@ The backend is complete, but the frontend needs implementation:
 - [ ] **Deployment scheduling** (cron-like deployment automation)
 
 #### Vendor Expansion
+
 - [ ] **AWS Amplify** (frontend)
 - [ ] **Heroku** (backend)
 - [ ] **DigitalOcean App Platform** (both)
 - [ ] **Azure Static Web Apps** (frontend)
 
 #### Developer Experience
+
 - [ ] **CLI interface** (alternative to web UI)
 - [ ] **Webhook support** (trigger deployments from git push)
 - [ ] **Slack/Discord notifications**
@@ -110,6 +119,7 @@ The backend is complete, but the frontend needs implementation:
 - [ ] **Health checks** (post-deployment validation)
 
 #### Data & Analytics
+
 - [ ] **PostgreSQL/SQLite** (replace JSON file storage)
 - [ ] **Deployment analytics** (detailed metrics)
 - [ ] **Cost optimization recommendations**
@@ -120,6 +130,7 @@ The backend is complete, but the frontend needs implementation:
 ## Architecture
 
 ### Current File Structure
+
 ```
 /deployer
   /app
@@ -158,11 +169,13 @@ The backend is complete, but the frontend needs implementation:
 ### Data Flow
 
 1. **Scan Flow**
+
    ```
    User → GET /api/scan → Scanner → Analyzer → Data Service → SavedPackage[]
    ```
 
 2. **Deployment Flow**
+
    ```
    User → POST /api/deploy → Executor → Vendor Adapter → Deployment
                                        ↓
@@ -178,10 +191,12 @@ The backend is complete, but the frontend needs implementation:
 ### Vendor Strategy
 
 **Frontend Packages** (Static hosting):
+
 - Primary: Vercel (best Vite/Vue DX)
 - Secondary: Netlify, Cloudflare Pages
 
 **Backend Packages** (Node.js hosting):
+
 - Primary: Railway (simple, affordable)
 - Secondary: Render, Fly.io
 
@@ -190,23 +205,27 @@ The backend is complete, but the frontend needs implementation:
 ## Key Design Decisions
 
 ### Why JSON Files?
+
 - Simple, no database setup required
 - Easy to inspect and debug
 - Sufficient for local deployment tool
 - Can migrate to SQL later if needed
 
 ### Why No Real-time Streaming?
+
 - Keeping initial implementation simple
 - Can be added via SSE or WebSockets later
 - Polling is sufficient for MVP
 
 ### Why Multiple Vendor Options?
+
 - Users have different preferences and budgets
 - Vendor lock-in avoidance
 - Regional availability varies
 - Different vendors excel at different things
 
 ### Why Local-First?
+
 - No external dependencies
 - Works offline (except deployment)
 - Full control over data and secrets

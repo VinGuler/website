@@ -30,8 +30,12 @@
           <li>
             Configure the build settings using the information above:
             <ul>
-              <li v-if="plan.buildCommand">Build command: <code>{{ plan.buildCommand }}</code></li>
-              <li v-if="plan.outputDirectory">Output directory: <code>{{ plan.outputDirectory }}</code></li>
+              <li v-if="plan.buildCommand">
+                Build command: <code>{{ plan.buildCommand }}</code>
+              </li>
+              <li v-if="plan.outputDirectory">
+                Output directory: <code>{{ plan.outputDirectory }}</code>
+              </li>
             </ul>
           </li>
           <li v-if="package.requiredEnvVars && package.requiredEnvVars.length > 0">
@@ -47,7 +51,8 @@
       </div>
 
       <div class="help-text">
-        💡 Each vendor has specific setup instructions. After signing up, refer to their documentation for detailed guidance.
+        💡 Each vendor has specific setup instructions. After signing up, refer to their
+        documentation for detailed guidance.
       </div>
     </div>
   </div>

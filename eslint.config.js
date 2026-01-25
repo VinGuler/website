@@ -8,13 +8,7 @@ import globals from 'globals';
 export default [
   // Global ignores
   {
-    ignores: [
-      '**/node_modules/**',
-      '**/dist/**',
-      '**/build/**',
-      '**/coverage/**',
-      'packages/client/public/**',
-    ],
+    ignores: ['**/node_modules/**', '**/dist/**', '**/build/**', '**/coverage/**', '**/public/**'],
   },
 
   // Base JS config
@@ -28,7 +22,7 @@ export default [
 
   // Vue-specific settings
   {
-    files: ['packages/client/**/*.vue'],
+    files: ['**/*.vue'],
     languageOptions: {
       parser: vueParser,
       parserOptions: {
@@ -41,7 +35,7 @@ export default [
 
   // TypeScript files in client
   {
-    files: ['packages/client/**/*.{ts,tsx}'],
+    files: ['**/client/**/*.{ts,tsx}'],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
@@ -53,7 +47,7 @@ export default [
 
   // Server-specific settings
   {
-    files: ['packages/server/**/*.ts'],
+    files: ['**/server/**/*.ts'],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {

@@ -55,9 +55,7 @@ export const useDeployerStore = defineStore('deployer', () => {
 
   const selectedPlan = computed(() => {
     if (!selectedPackage.value) return null;
-    return deploymentPlans.value.find(
-      (p) => p.packageName === selectedPackage.value?.name
-    );
+    return deploymentPlans.value.find((p) => p.packageName === selectedPackage.value?.name);
   });
 
   async function loadPackages() {

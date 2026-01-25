@@ -27,8 +27,8 @@ defineProps<{
 function handleVendorSelect(option: any) {
   const confirmed = confirm(
     `You will be redirected to ${option.vendorDisplayName} to sign up/login and create your deployment.\n\n` +
-    `Once you have an account, you can return here to view setup instructions.\n\n` +
-    `Continue to ${option.vendorDisplayName}?`
+      `Once you have an account, you can return here to view setup instructions.\n\n` +
+      `Continue to ${option.vendorDisplayName}?`
   );
 
   if (confirmed) {

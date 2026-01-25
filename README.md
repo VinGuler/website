@@ -22,19 +22,19 @@ npm install
 
 ## Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start both client and server in development mode |
-| `npm run dev:client` | Start only the Vue.js dev server (port 5173) |
-| `npm run dev:server` | Start only the Express server with hot-reload (port 3000) |
-| `npm run build` | Build both client and server for production |
-| `npm run test` | Run all tests |
-| `npm run test:client` | Run only client tests |
-| `npm run test:server` | Run only server tests |
-| `npm run lint` | Lint all files with ESLint |
-| `npm run lint:fix` | Lint and auto-fix issues |
-| `npm run format` | Format all files with Prettier |
-| `npm run format:check` | Check formatting without writing |
+| Command                | Description                                               |
+| ---------------------- | --------------------------------------------------------- |
+| `npm run dev`          | Start both client and server in development mode          |
+| `npm run dev:client`   | Start only the Vue.js dev server (port 5173)              |
+| `npm run dev:server`   | Start only the Express server with hot-reload (port 3000) |
+| `npm run build`        | Build both client and server for production               |
+| `npm run test`         | Run all tests                                             |
+| `npm run test:client`  | Run only client tests                                     |
+| `npm run test:server`  | Run only server tests                                     |
+| `npm run lint`         | Lint all files with ESLint                                |
+| `npm run lint:fix`     | Lint and auto-fix issues                                  |
+| `npm run format`       | Format all files with Prettier                            |
+| `npm run format:check` | Check formatting without writing                          |
 
 ## Development
 

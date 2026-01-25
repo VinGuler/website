@@ -1,9 +1,4 @@
-import type {
-  PackageInfo,
-  PackageType,
-  Framework,
-  BuildTool,
-} from '../types/index.js';
+import type { PackageInfo, PackageType, Framework, BuildTool } from '../types/index.js';
 import { logger } from '../utils/logger.js';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
@@ -37,13 +32,9 @@ export class Analyzer {
   private detectPackageType(pkg: any): PackageType {
     const deps = { ...pkg.dependencies, ...pkg.devDependencies };
 
-    const hasFrontendFramework = ['vue', 'react', 'svelte', 'angular'].some(
-      (fw) => deps[fw]
-    );
+    const hasFrontendFramework = ['vue', 'react', 'svelte', 'angular'].some((fw) => deps[fw]);
     const hasVite = deps['vite'] || deps['@vitejs/plugin-vue'];
-    const hasBackendFramework = ['express', 'fastify', '@nestjs/core'].some(
-      (fw) => deps[fw]
-    );
+    const hasBackendFramework = ['express', 'fastify', '@nestjs/core'].some((fw) => deps[fw]);
 
     if (hasFrontendFramework || hasVite) {
       if (hasBackendFramework) {

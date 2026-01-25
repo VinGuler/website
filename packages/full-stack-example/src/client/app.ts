@@ -98,7 +98,7 @@ if (todoForm && todoInput) {
 }
 
 // Toggle todo completion
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 (window as any).toggleTodo = async (id: number) => {
   const todo = todos.find((t) => t.id === id);
   if (!todo) return;
@@ -126,7 +126,7 @@ if (todoForm && todoInput) {
 };
 
 // Delete todo
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 (window as any).deleteTodo = async (id: number) => {
   try {
     const response = await fetch(`${API_BASE}/api/todos/${id}`, {

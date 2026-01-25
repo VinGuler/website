@@ -56,9 +56,7 @@ describe('Todo API', () => {
     });
 
     it('should return error for non-existent todo', async () => {
-      const response = await request(app)
-        .put('/api/todos/99999')
-        .send({ completed: true });
+      const response = await request(app).put('/api/todos/99999').send({ completed: true });
 
       expect(response.status).toBe(404);
       expect(response.body.success).toBe(false);
@@ -69,9 +67,7 @@ describe('Todo API', () => {
   describe('DELETE /api/todos/:id', () => {
     it('should delete a todo', async () => {
       // First create a todo to delete
-      const createResponse = await request(app)
-        .post('/api/todos')
-        .send({ text: 'Todo to delete' });
+      const createResponse = await request(app).post('/api/todos').send({ text: 'Todo to delete' });
 
       const todoId = createResponse.body.data.id;
 

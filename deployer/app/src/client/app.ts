@@ -137,7 +137,8 @@ clearDataBtn.addEventListener('click', async () => {
 // Render Packages
 function renderPackages() {
   if (packages.length === 0) {
-    packagesList.innerHTML = '<p class="placeholder">No packages found. Click "Scan Repository" to detect packages.</p>';
+    packagesList.innerHTML =
+      '<p class="placeholder">No packages found. Click "Scan Repository" to detect packages.</p>';
     return;
   }
 
@@ -157,7 +158,9 @@ function renderPackages() {
         ${pkg.hasDatabase ? `<div><strong>Database:</strong> ${pkg.databaseType}</div>` : ''}
       </div>
 
-      ${pkg.latestDeployment ? `
+      ${
+        pkg.latestDeployment
+          ? `
         <div class="deployment-stats">
           <div class="stat-title">Latest Deployment</div>
           <div class="stat-row">
@@ -172,18 +175,24 @@ function renderPackages() {
             <span class="stat-label">Deployed:</span>
             <span>${new Date(pkg.latestDeployment.deployedAt).toLocaleString()}</span>
           </div>
-          ${pkg.latestDeployment.deploymentUrl ? `
+          ${
+            pkg.latestDeployment.deploymentUrl
+              ? `
             <div class="stat-row">
               <a href="${pkg.latestDeployment.deploymentUrl}" target="_blank" class="deployment-link">View Deployment →</a>
             </div>
-          ` : ''}
+          `
+              : ''
+          }
         </div>
         <div class="deployment-count">Total Deployments: ${pkg.deploymentCount}</div>
-      ` : `
+      `
+          : `
         <div class="deployment-stats">
           <div class="stat-title">Not Deployed Yet</div>
         </div>
-      `}
+      `
+      }
     </div>
   `
     )

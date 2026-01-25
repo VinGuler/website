@@ -17,12 +17,14 @@ This is **an AI-assisted development tool** that understands monorepo constraint
 ## Core Features
 
 ### 1. AI-Powered Package Generation
+
 - **Natural language interface**: Describe your app idea in plain English
 - **Intent understanding**: AI determines the appropriate package type (client/server/full-stack)
 - **Smart scaffolding**: Generates complete project structure based on existing examples
 - **Constraint awareness**: Adheres to monorepo conventions, lint rules, and architectural patterns
 
 ### 2. Template-Based Architecture
+
 - **Client template** (client-example):
   - Vue 3 + TypeScript + Vite
   - Pinia state management + Vue Router
@@ -40,6 +42,7 @@ This is **an AI-assisted development tool** that understands monorepo constraint
   - Both frontend and backend testing
 
 ### 3. Automatic Monorepo Integration
+
 - **Root package.json updates**:
   - Adds new workspace to workspaces array
   - Creates dev, build, and test scripts for the new package
@@ -58,6 +61,7 @@ This is **an AI-assisted development tool** that understands monorepo constraint
   - Configures proper paths and references
 
 ### 4. Intelligent Code Generation
+
 - **Dependency management**:
   - Suggests relevant npm packages based on app requirements
   - Uses version ranges matching monorepo standards
@@ -73,6 +77,7 @@ This is **an AI-assisted development tool** that understands monorepo constraint
   - Adds proper error handling and validation
 
 ### 5. Interactive Refinement
+
 - **Clarification prompts**: AI asks questions when requirements are ambiguous
 - **Feature selection**: User can specify which features to include/exclude
 - **Customization options**: Adjust package name, description, dependencies
@@ -83,6 +88,7 @@ This is **an AI-assisted development tool** that understands monorepo constraint
 ## Technical Architecture
 
 ### Stack
+
 - **Backend**: Express.js + TypeScript (agentic server)
 - **Frontend**: HTML + TypeScript or lightweight Vue interface
 - **AI Agent**: Claude SDK for intelligent code generation
@@ -90,6 +96,7 @@ This is **an AI-assisted development tool** that understands monorepo constraint
 - **Code Generation**: Template-based with AI-enhanced customization
 
 ### Key Services
+
 1. **Intent Analyzer** - Parses user's app description and extracts requirements
 2. **Package Type Classifier** - Determines if project should be client/server/full-stack
 3. **Template Selector** - Chooses appropriate base template
@@ -99,12 +106,14 @@ This is **an AI-assisted development tool** that understands monorepo constraint
 7. **Validator** - Ensures generated code passes lint and type checks
 
 ### Agent Architecture
+
 - **Agentic workflow**: Multi-step reasoning process for code generation
 - **Context awareness**: Reads existing examples to understand patterns
 - **Tool usage**: File system operations, code analysis, validation
 - **Iterative refinement**: Can revise generated code based on validation results
 
 ### Integration Points
+
 - **File system**: Read templates, write new packages
 - **NPM**: Install dependencies for new packages
 - **Git**: Stage new files (optional auto-commit)
@@ -142,6 +151,7 @@ This is **an AI-assisted development tool** that understands monorepo constraint
 ## Example Interactions
 
 ### Example 1: Simple Client App
+
 ```
 User: "Create a todo list app with Vue"
 
@@ -161,6 +171,7 @@ Generated Package:
 ```
 
 ### Example 2: Backend API
+
 ```
 User: "Build a REST API for managing blog posts with CRUD endpoints"
 
@@ -180,6 +191,7 @@ Generated Package:
 ```
 
 ### Example 3: Full-Stack App
+
 ```
 User: "Create a weather dashboard that fetches data from an API and displays it"
 
@@ -203,14 +215,16 @@ Generated Package:
 ## Constraints & Validation
 
 ### Monorepo Constraints
+
 - Must use existing Node.js version requirements (^20.19.0 || >=22.12.0)
 - Must follow workspace naming conventions in root package.json
-- Must use consistent script naming patterns (dev:*, build:*, test:*)
+- Must use consistent script naming patterns (dev:_, build:_, test:\*)
 - Must place packages under `/packages` directory
 - Must use `type: "module"` for ES modules
 - Must set `private: true` for workspace packages
 
 ### Code Quality Constraints
+
 - Must pass ESLint validation with existing rules
 - Must pass TypeScript type checking (no `any` without explicit need)
 - Must include at least one basic test file
@@ -219,6 +233,7 @@ Generated Package:
 - Must include proper package.json metadata
 
 ### Testing Constraints
+
 - Client packages: Must use jsdom environment
 - Server packages: Must use node environment
 - Must integrate with root vitest.workspace.ts
@@ -226,6 +241,7 @@ Generated Package:
 - Must use vitest ^4.0.17 (consistent with monorepo)
 
 ### Dependency Constraints
+
 - Must use compatible versions with existing packages
 - Must avoid duplicate dependencies where possible
 - Must separate dependencies vs devDependencies correctly

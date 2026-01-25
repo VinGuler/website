@@ -17,9 +17,7 @@ export class Scanner {
 
     try {
       const packageDirs = await this.getPackageDirectories();
-      const packages = await Promise.all(
-        packageDirs.map((dir) => this.readPackageInfo(dir))
-      );
+      const packages = await Promise.all(packageDirs.map((dir) => this.readPackageInfo(dir)));
 
       const validPackages = packages.filter((pkg) => pkg !== null);
 

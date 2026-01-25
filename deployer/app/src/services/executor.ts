@@ -83,9 +83,7 @@ export class Executor {
         await dataService.updatePackageDeployment(packageData.id);
       }
 
-      logger.info(
-        `Deployment ${deploymentRecord.id} completed with status: ${result.status}`
-      );
+      logger.info(`Deployment ${deploymentRecord.id} completed with status: ${result.status}`);
 
       // Return status in expected format
       const status: DeploymentStatus = {

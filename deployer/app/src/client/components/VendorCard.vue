@@ -22,9 +22,7 @@
       </ul>
     </div>
 
-    <div class="cta">
-      Click to sign up / login →
-    </div>
+    <div class="cta">Click to sign up / login →</div>
   </div>
 </template>
 

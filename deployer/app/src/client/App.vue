@@ -10,10 +10,12 @@
         <div class="section-header">
           <h2>Detected Packages</h2>
           <div class="header-buttons">
-            <button @click="store.clearAllData()" class="btn btn-danger">
-              Clear All Data
-            </button>
-            <button @click="store.scanRepository()" class="btn btn-primary" :disabled="store.loading">
+            <button class="btn btn-danger" @click="store.clearAllData()">Clear All Data</button>
+            <button
+              class="btn btn-primary"
+              :disabled="store.loading"
+              @click="store.scanRepository()"
+            >
               {{ store.loading ? 'Scanning...' : 'Scan Repository' }}
             </button>
           </div>
@@ -39,10 +41,7 @@
 
         <transition name="expand">
           <div v-if="store.selectedPackage && store.selectedPlan" class="expanded-section">
-            <VendorOptions
-              :plan="store.selectedPlan"
-              :package="store.selectedPackage"
-            />
+            <VendorOptions :plan="store.selectedPlan" :package="store.selectedPackage" />
           </div>
         </transition>
       </div>

@@ -16,6 +16,7 @@ This is **not an AI-powered deployment tool** — it's a deterministic, safe, an
 ## Core Features
 
 ### 1. Package Management
+
 - **Automatic scanning** of `/packages` directory
 - **Package detection and analysis**:
   - Type: frontend, backend, or full-stack
@@ -26,6 +27,7 @@ This is **not an AI-powered deployment tool** — it's a deterministic, safe, an
   - Required environment variables
 
 ### 2. Vendor & Plan Selection
+
 - **Multiple vendor support**:
   - Frontend: Vercel, Netlify, Cloudflare Pages
   - Backend: Railway, Render, Fly.io
@@ -36,12 +38,14 @@ This is **not an AI-powered deployment tool** — it's a deterministic, safe, an
   - Limitations per vendor/plan
 
 ### 3. Deployment Execution
+
 - **One-click deployments** with vendor-specific adapters
 - **Real-time progress tracking** with status updates
 - **Deployment logs** for debugging
 - **Environment variable management** (secure, gitignored)
 
 ### 4. Deployment Statistics & History
+
 - **Per-package stats**:
   - Total deployment count
   - Last deployment timestamp
@@ -58,12 +62,14 @@ This is **not an AI-powered deployment tool** — it's a deterministic, safe, an
 ## Technical Architecture
 
 ### Stack
+
 - **Backend**: Express.js + TypeScript
 - **Frontend**: HTML + TypeScript (minimal, no heavy framework)
 - **Data Storage**: JSON files (local persistence)
 - **Deployment**: Vendor CLI/API adapters
 
 ### Key Services
+
 1. **Scanner** - Detects packages in monorepo
 2. **Analyzer** - Classifies packages and extracts metadata
 3. **Planner** - Generates deployment recommendations
@@ -71,6 +77,7 @@ This is **not an AI-powered deployment tool** — it's a deterministic, safe, an
 5. **Data Service** - Persists packages and deployment records
 
 ### Security
+
 - Environment variables stored in gitignored `.env` file
 - No plain-text secrets in deployment records
 - Local-only operation (no external AI/cloud dependencies)

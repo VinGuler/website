@@ -13,6 +13,7 @@ An AI-powered local web application that generates new monorepo packages from na
 **Goal**: Set up project structure, AI agent foundation, and basic services
 
 #### Setup Tasks
+
 - [ ] Create `/package-generator/app` directory structure
 - [ ] Initialize package.json with dependencies
 - [ ] Configure TypeScript (tsconfig.json)
@@ -22,6 +23,7 @@ An AI-powered local web application that generates new monorepo packages from na
 - [ ] Set up basic logging utility
 
 #### Core Dependencies
+
 ```json
 {
   "dependencies": {
@@ -39,6 +41,7 @@ An AI-powered local web application that generates new monorepo packages from na
 ```
 
 #### File Structure
+
 ```
 /package-generator
   /app
@@ -73,13 +76,15 @@ An AI-powered local web application that generates new monorepo packages from na
 **Goal**: Implement services to read existing templates and set up AI agent
 
 #### Template Reader Service
-- [ ] Scan packages/*-example directories
+
+- [ ] Scan packages/\*-example directories
 - [ ] Extract template structure (files, folders, dependencies)
 - [ ] Parse package.json for each template
 - [ ] Extract common patterns (imports, exports, test structure)
 - [ ] Build template metadata cache
 
 **Template Metadata Structure**:
+
 ```typescript
 interface TemplateMetadata {
   name: 'client' | 'server' | 'full-stack';
@@ -97,6 +102,7 @@ interface TemplateMetadata {
 ```
 
 #### AI Agent Service
+
 - [ ] Initialize Claude SDK client
 - [ ] Create agent conversation management
 - [ ] Implement tool calling for file system operations
@@ -105,6 +111,7 @@ interface TemplateMetadata {
 - [ ] Add error handling and retry logic
 
 **Agent Tools**:
+
 1. `read_template` - Read example template files
 2. `analyze_requirements` - Extract structured requirements from description
 3. `validate_package_name` - Check if name is available and valid
@@ -119,6 +126,7 @@ interface TemplateMetadata {
 **Goal**: Parse user descriptions and determine package requirements
 
 #### Intent Analyzer Service
+
 - [ ] Use Claude to parse natural language description
 - [ ] Extract key information:
   - Package type (client/server/full-stack)
@@ -132,6 +140,7 @@ interface TemplateMetadata {
 - [ ] Build structured requirements object
 
 **Requirements Object**:
+
 ```typescript
 interface PackageRequirements {
   packageType: 'client' | 'server' | 'full-stack';
@@ -151,6 +160,7 @@ interface PackageRequirements {
 ```
 
 #### Classification Logic
+
 - [ ] Analyze keywords for package type hints:
   - Client: "UI", "component", "dashboard", "frontend", "Vue"
   - Server: "API", "endpoint", "REST", "backend", "Express"
@@ -166,6 +176,7 @@ interface PackageRequirements {
 **Goal**: Generate package files with AI-customized code
 
 #### Code Generator Service
+
 - [ ] Implement template copying with modifications
 - [ ] Generate package.json from template + requirements
 - [ ] Create src directory structure
@@ -176,6 +187,7 @@ interface PackageRequirements {
 - [ ] Create configuration files (tsconfig, vite.config, etc.)
 
 **Generation Steps**:
+
 1. **Copy base structure** from selected template
 2. **Customize package.json**:
    - Set name, description, version
@@ -196,6 +208,7 @@ interface PackageRequirements {
    - vitest.config.ts (if needed for custom test config)
 
 **AI Prompting Strategy**:
+
 ```typescript
 const systemPrompt = `
 You are a code generator for a monorepo. Generate production-ready code that:
@@ -227,6 +240,7 @@ Generate the complete file content following the template patterns.
 **Goal**: Update root monorepo configuration files
 
 #### Config Manager Service
+
 - [ ] **Update root package.json**:
   - Add workspace to workspaces array
   - Add dev script: `"dev:package-name": "npm run dev -w package-name"`
@@ -244,6 +258,7 @@ Generate the complete file content following the template patterns.
   - Allow rollback on failure
 
 **Config Update Logic**:
+
 ```typescript
 interface ConfigUpdate {
   file: string;
@@ -259,7 +274,7 @@ async function updateRootConfigs(packageName: string, packageType: string) {
       file: 'package.json',
       type: 'insert',
       location: '$.workspaces',
-      content: `packages/${packageName}`
+      content: `packages/${packageName}`,
     },
     // Add scripts
     {
@@ -269,16 +284,16 @@ async function updateRootConfigs(packageName: string, packageType: string) {
       content: {
         [`dev:${packageName}`]: `npm run dev -w ${packageName}`,
         [`build:${packageName}`]: `npm run build -w ${packageName}`,
-        [`test:${packageName}`]: `vitest --project ${packageName}`
-      }
+        [`test:${packageName}`]: `vitest --project ${packageName}`,
+      },
     },
     // Add vitest project
     {
       file: 'vitest.workspace.ts',
       type: 'insert',
       location: 'test.projects',
-      content: generateVitestProjectConfig(packageName, packageType)
-    }
+      content: generateVitestProjectConfig(packageName, packageType),
+    },
   ];
 
   return applyConfigUpdates(updates);
@@ -292,6 +307,7 @@ async function updateRootConfigs(packageName: string, packageType: string) {
 **Goal**: Ensure generated packages are valid and functional
 
 #### Validator Service
+
 - [ ] **TypeScript validation**:
   - Run `tsc --noEmit` on generated package
   - Check for type errors
@@ -310,13 +326,14 @@ async function updateRootConfigs(packageName: string, packageType: string) {
   - Report test results
 
 **Validation Flow**:
+
 ```typescript
 async function validateGeneratedPackage(packageName: string) {
   const results = {
     typescript: { passed: false, errors: [] },
     eslint: { passed: false, errors: [] },
     dependencies: { passed: false, missing: [] },
-    tests: { passed: false, failures: [] }
+    tests: { passed: false, failures: [] },
   };
 
   // 1. Type check
@@ -347,6 +364,7 @@ async function validateGeneratedPackage(packageName: string) {
 #### API Endpoints
 
 **1. Generate Package**
+
 ```
 POST /api/generate
 Body: { description: string, preferences?: object }
@@ -358,6 +376,7 @@ Response: {
 ```
 
 **2. Answer Clarifications**
+
 ```
 POST /api/generate/:conversationId/clarify
 Body: { answers: Record<string, string> }
@@ -368,6 +387,7 @@ Response: {
 ```
 
 **3. Confirm Generation**
+
 ```
 POST /api/generate/:conversationId/confirm
 Body: { packageName: string, customizations?: object }
@@ -379,6 +399,7 @@ Response: {
 ```
 
 **4. Get Generation Status**
+
 ```
 GET /api/generate/:conversationId/status
 Response: {
@@ -391,12 +412,14 @@ Response: {
 ```
 
 **5. Get Generation History**
+
 ```
 GET /api/generations
 Response: GenerationRecord[]
 ```
 
 **6. Rollback Generation**
+
 ```
 POST /api/generate/:conversationId/rollback
 Response: { success: boolean, message: string }
@@ -411,17 +434,20 @@ Response: { success: boolean, message: string }
 #### Pages & Components
 
 **1. Generator Page** (Main Interface)
+
 - Large text area for app description
 - "Generate" button to start process
 - Real-time status display
 - Conversation-style clarification prompts
 
 **2. Clarification View**
+
 - Display clarification questions
 - Input fields for answers
 - "Continue" button to proceed
 
 **3. Preview View**
+
 - Package structure tree visualization
 - List of files to be created
 - Dependencies to be installed
@@ -430,12 +456,14 @@ Response: { success: boolean, message: string }
 - "Confirm" and "Modify" buttons
 
 **4. Progress View**
+
 - Step-by-step progress indicator
 - Real-time log streaming
 - Validation results display
 - Success/error notifications
 
 **5. History View**
+
 - List of previously generated packages
 - Generation timestamp
 - Package type and name
@@ -443,6 +471,7 @@ Response: { success: boolean, message: string }
 - "View details" link
 
 #### UI Flow
+
 ```
 ┌─────────────────────┐
 │  Describe App Idea  │
@@ -480,6 +509,7 @@ Response: { success: boolean, message: string }
 **Goal**: Complete end-to-end functionality and refinements
 
 #### Integration Tasks
+
 - [ ] Connect all services into complete workflow
 - [ ] Implement rollback on failure
 - [ ] Add comprehensive error handling
@@ -488,6 +518,7 @@ Response: { success: boolean, message: string }
 - [ ] Validate against all three template types
 
 #### Polish Tasks
+
 - [ ] Improve AI prompts based on testing
 - [ ] Optimize token usage (caching, efficient prompts)
 - [ ] Add loading states and better UX
@@ -496,6 +527,7 @@ Response: { success: boolean, message: string }
 - [ ] Write usage documentation
 
 #### Testing Scenarios
+
 1. **Simple client app**: "Create a counter app with increment/decrement buttons"
 2. **Server API**: "Build a REST API for managing tasks"
 3. **Full-stack app**: "Create a notes app with CRUD operations"
@@ -517,7 +549,14 @@ interface GenerationConversation {
   requirements?: PackageRequirements;
   clarifications?: ClarificationQuestion[];
   answers?: Record<string, string>;
-  status: 'analyzing' | 'clarifying' | 'previewing' | 'generating' | 'validating' | 'completed' | 'failed';
+  status:
+    | 'analyzing'
+    | 'clarifying'
+    | 'previewing'
+    | 'generating'
+    | 'validating'
+    | 'completed'
+    | 'failed';
   createdAt: Date;
   completedAt?: Date;
 }
@@ -642,6 +681,7 @@ class PackageGeneratorAgent {
 ## Key Design Decisions
 
 ### Why Claude SDK?
+
 - Advanced code generation capabilities
 - Function/tool calling for structured operations
 - Long context window for template analysis
@@ -649,6 +689,7 @@ class PackageGeneratorAgent {
 - High-quality TypeScript generation
 
 ### Why Template-Based Approach?
+
 - Ensures consistency with existing packages
 - Faster generation than pure AI synthesis
 - Guarantees working configuration
@@ -657,6 +698,7 @@ class PackageGeneratorAgent {
 - AI enhances templates rather than creating from scratch
 
 ### Why Validation Before Completion?
+
 - Catch errors before user sees the package
 - Prevent broken code in monorepo
 - Ensure tests pass out of the box
@@ -664,6 +706,7 @@ class PackageGeneratorAgent {
 - Provide immediate feedback on issues
 
 ### Why Conversational Flow?
+
 - Clarifications improve generation quality
 - Users can guide the AI with preferences
 - Preview allows review before generation
@@ -671,6 +714,7 @@ class PackageGeneratorAgent {
 - Better user control and transparency
 
 ### Why Local-First?
+
 - Works with local monorepo structure
 - No external service dependencies (except Claude API)
 - Full control over generated code
@@ -678,6 +722,7 @@ class PackageGeneratorAgent {
 - Easy to debug and iterate
 
 ### Why JSON for Generation History?
+
 - Simple persistence for MVP
 - Easy to inspect generation records
 - No database setup required
@@ -689,6 +734,7 @@ class PackageGeneratorAgent {
 ## Development Roadmap
 
 ### Week 1: Foundation
+
 - [ ] Set up project structure
 - [ ] Configure TypeScript and Express
 - [ ] Install Claude SDK
@@ -696,24 +742,28 @@ class PackageGeneratorAgent {
 - [ ] Implement template reader
 
 ### Week 2: AI Agent Core
+
 - [ ] Initialize Claude agent
 - [ ] Implement intent analyzer
 - [ ] Build clarification system
 - [ ] Create requirement extraction
 
 ### Week 3: Code Generation
+
 - [ ] Implement code generator service
 - [ ] Create file generation logic
 - [ ] Build config manager
 - [ ] Add validation service
 
 ### Week 4: API & Frontend
+
 - [ ] Build REST API endpoints
 - [ ] Create frontend UI
 - [ ] Implement progress tracking
 - [ ] Add history view
 
 ### Week 5: Testing & Polish
+
 - [ ] Test with various scenarios
 - [ ] Fix bugs and edge cases
 - [ ] Optimize AI prompts
@@ -725,6 +775,7 @@ class PackageGeneratorAgent {
 ## Future Enhancements
 
 ### Advanced Features
+
 - [ ] **Multi-package generation**: Generate related packages (e.g., API + client) in one go
 - [ ] **Template customization**: Allow users to create custom templates
 - [ ] **Pattern learning**: Learn from existing packages beyond just examples
@@ -733,18 +784,21 @@ class PackageGeneratorAgent {
 - [ ] **Code refactoring**: Modify existing packages based on descriptions
 
 ### AI Improvements
+
 - [ ] **Fine-tuning**: Create custom model trained on monorepo patterns
 - [ ] **Caching**: Cache template analysis and common patterns
 - [ ] **Embeddings**: Use vector search for similar package references
 - [ ] **Multi-agent**: Different agents for analysis, generation, validation
 
 ### Integration
+
 - [ ] **Git integration**: Auto-commit generated packages with descriptive messages
 - [ ] **Deployer integration**: Direct deployment after generation
 - [ ] **VSCode extension**: Generate packages from IDE
 - [ ] **CLI interface**: Command-line package generation
 
 ### Developer Experience
+
 - [ ] **Hot reload**: Watch mode for template changes
 - [ ] **Diff view**: Show changes before applying
 - [ ] **Undo/redo**: Full generation history with rollback

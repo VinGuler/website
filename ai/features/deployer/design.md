@@ -57,17 +57,17 @@ The Deployer is a production deployment management tool for monorepo packages. I
 
 ```typescript
 interface PackageInfo {
-  name: string;              // Package name
-  path: string;              // Relative path in monorepo
-  type: PackageType;         // frontend | backend | fullstack
-  framework: Framework;       // vue | react | express | etc.
-  buildTool: BuildTool;      // vite | webpack | tsc | etc.
-  nodeVersion?: string;      // Required Node version
+  name: string; // Package name
+  path: string; // Relative path in monorepo
+  type: PackageType; // frontend | backend | fullstack
+  framework: Framework; // vue | react | express | etc.
+  buildTool: BuildTool; // vite | webpack | tsc | etc.
+  nodeVersion?: string; // Required Node version
   dependencies: Record<string, string>;
   devDependencies: Record<string, string>;
   scripts: Record<string, string>;
-  hasDatabase: boolean;      // Database dependency detected
-  databaseType?: string;     // postgres | mysql | mongodb | etc.
+  hasDatabase: boolean; // Database dependency detected
+  databaseType?: string; // postgres | mysql | mongodb | etc.
   requiredEnvVars: string[]; // Detected env var requirements
 }
 ```
@@ -76,10 +76,10 @@ interface PackageInfo {
 
 ```typescript
 interface SavedPackage extends PackageInfo {
-  id: string;                // Unique identifier
-  scannedAt: string;         // ISO timestamp of last scan
-  lastDeployedAt?: string;   // ISO timestamp of last deployment
-  deploymentCount: number;   // Total deployments for this package
+  id: string; // Unique identifier
+  scannedAt: string; // ISO timestamp of last scan
+  lastDeployedAt?: string; // ISO timestamp of last deployment
+  deploymentCount: number; // Total deployments for this package
 }
 ```
 
@@ -87,17 +87,17 @@ interface SavedPackage extends PackageInfo {
 
 ```typescript
 interface DeploymentOption {
-  vendor: VendorName;              // vercel | railway | etc.
-  vendorDisplayName: string;       // Human-readable name
-  recommended: boolean;            // Is this the recommended option?
+  vendor: VendorName; // vercel | railway | etc.
+  vendorDisplayName: string; // Human-readable name
+  recommended: boolean; // Is this the recommended option?
   estimatedCost: {
-    min: number;                   // Minimum monthly cost
-    max: number;                   // Maximum monthly cost
-    currency: string;              // USD
-    period: string;                // month
+    min: number; // Minimum monthly cost
+    max: number; // Maximum monthly cost
+    currency: string; // USD
+    period: string; // month
   };
-  features: string[];              // List of key features
-  limitations?: string[];          // Known limitations
+  features: string[]; // List of key features
+  limitations?: string[]; // Known limitations
 }
 ```
 
@@ -107,11 +107,11 @@ interface DeploymentOption {
 interface DeploymentPlan {
   packageName: string;
   packageType: PackageType;
-  deploymentOptions: DeploymentOption[];  // Multiple vendor choices
-  buildCommand?: string;                  // Recommended build command
-  outputDirectory?: string;               // Build output directory
-  envVarsRequired: string[];              // Required env vars
-  notes: string[];                        // Important notes for user
+  deploymentOptions: DeploymentOption[]; // Multiple vendor choices
+  buildCommand?: string; // Recommended build command
+  outputDirectory?: string; // Build output directory
+  envVarsRequired: string[]; // Required env vars
+  notes: string[]; // Important notes for user
 }
 ```
 
@@ -120,11 +120,11 @@ interface DeploymentPlan {
 ```typescript
 interface DeploymentConfig {
   packageName: string;
-  vendor: VendorName;                    // User-selected vendor
-  envVars: Record<string, string>;       // User-provided env vars
-  buildCommand?: string;                 // Custom build command
-  outputDirectory?: string;              // Custom output directory
-  customConfig?: Record<string, any>;    // Vendor-specific config
+  vendor: VendorName; // User-selected vendor
+  envVars: Record<string, string>; // User-provided env vars
+  buildCommand?: string; // Custom build command
+  outputDirectory?: string; // Custom output directory
+  customConfig?: Record<string, any>; // Vendor-specific config
 }
 ```
 
@@ -132,17 +132,17 @@ interface DeploymentConfig {
 
 ```typescript
 interface DeploymentRecord {
-  id: string;                  // Unique deployment ID
-  packageId: string;           // Foreign key to SavedPackage
-  packageName: string;         // Denormalized for querying
-  vendor: VendorName;          // Vendor used
-  status: DeploymentStatus;    // pending | building | deploying | success | failed
-  startedAt: string;           // ISO timestamp
-  completedAt?: string;        // ISO timestamp (if completed)
-  logs: string[];              // Deployment logs
-  error?: string;              // Error message (if failed)
-  deploymentUrl?: string;      // Live deployment URL
-  envVars?: string[];          // Env var keys only (no values)
+  id: string; // Unique deployment ID
+  packageId: string; // Foreign key to SavedPackage
+  packageName: string; // Denormalized for querying
+  vendor: VendorName; // Vendor used
+  status: DeploymentStatus; // pending | building | deploying | success | failed
+  startedAt: string; // ISO timestamp
+  completedAt?: string; // ISO timestamp (if completed)
+  logs: string[]; // Deployment logs
+  error?: string; // Error message (if failed)
+  deploymentUrl?: string; // Live deployment URL
+  envVars?: string[]; // Env var keys only (no values)
 }
 ```
 
@@ -153,9 +153,11 @@ interface DeploymentRecord {
 ### Package Management
 
 #### `GET /api/scan`
+
 Scans the monorepo, analyzes packages, and saves to disk.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -168,9 +170,11 @@ Scans the monorepo, analyzes packages, and saves to disk.
 ```
 
 #### `GET /api/packages`
+
 Retrieves all saved packages with deployment stats.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -191,9 +195,11 @@ Retrieves all saved packages with deployment stats.
 ### Deployment Planning
 
 #### `GET /api/deployment-plan`
+
 Generates deployment plans for all packages.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -223,9 +229,11 @@ Generates deployment plans for all packages.
 ### Deployment Execution
 
 #### `POST /api/deploy/:packageName`
+
 Executes a deployment for the specified package.
 
 **Request Body:**
+
 ```json
 {
   "packageName": "client",
@@ -239,6 +247,7 @@ Executes a deployment for the specified package.
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -254,9 +263,11 @@ Executes a deployment for the specified package.
 ```
 
 #### `GET /api/deployment-status/:id`
+
 Checks the status of a specific deployment.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -273,9 +284,11 @@ Checks the status of a specific deployment.
 ### Deployment History
 
 #### `GET /api/deployments`
+
 Retrieves all deployment records, sorted by most recent first.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -302,9 +315,11 @@ Retrieves all deployment records, sorted by most recent first.
 **Purpose:** Discover packages in the monorepo
 
 **Methods:**
+
 - `scan(): Promise<ScanResult>` - Scans `/packages` directory and returns basic package info
 
 **Logic:**
+
 1. Read `/packages` directory
 2. For each subdirectory, check if `package.json` exists
 3. Parse `package.json` and extract metadata
@@ -315,9 +330,11 @@ Retrieves all deployment records, sorted by most recent first.
 **Purpose:** Classify packages and extract detailed metadata
 
 **Methods:**
+
 - `analyze(packageInfo: PackageInfo): Promise<PackageInfo>` - Enhances package info with classification
 
 **Logic:**
+
 1. Detect package type (frontend/backend/fullstack) by analyzing dependencies
 2. Identify framework (Vue, React, Express, etc.)
 3. Detect build tool (Vite, webpack, TypeScript, etc.)
@@ -327,6 +344,7 @@ Retrieves all deployment records, sorted by most recent first.
 7. Return enriched package info
 
 **Classification Rules:**
+
 - **Frontend:** Has `vite`, `react`, `vue`, `svelte`, etc. in dependencies
 - **Backend:** Has `express`, `fastify`, `nest`, etc. in dependencies
 - **Fullstack:** Has both frontend and backend indicators
@@ -337,9 +355,11 @@ Retrieves all deployment records, sorted by most recent first.
 **Purpose:** Generate deployment recommendations
 
 **Methods:**
+
 - `generatePlan(packageInfo: PackageInfo): DeploymentPlan` - Creates deployment plan with vendor options
 
 **Logic:**
+
 1. Based on package type, suggest appropriate vendors
 2. For each vendor, provide:
    - Cost estimates (hardcoded ranges)
@@ -351,6 +371,7 @@ Retrieves all deployment records, sorted by most recent first.
 6. Add helpful notes
 
 **Vendor Recommendations:**
+
 - **Frontend:** Vercel (recommended), Netlify, Cloudflare Pages
 - **Backend:** Railway (recommended), Render, Fly.io
 
@@ -359,10 +380,12 @@ Retrieves all deployment records, sorted by most recent first.
 **Purpose:** Orchestrate deployments
 
 **Methods:**
+
 - `deploy(config: DeploymentConfig): Promise<DeploymentStatus>` - Executes deployment
 - `getDeploymentStatus(id: string): DeploymentStatus | null` - Retrieves deployment status
 
 **Logic:**
+
 1. Validate deployment configuration
 2. Select appropriate vendor adapter
 3. Execute deployment via adapter
@@ -376,6 +399,7 @@ Retrieves all deployment records, sorted by most recent first.
 **Purpose:** Persist and retrieve data
 
 **Methods:**
+
 - `getAllPackages(): Promise<SavedPackage[]>`
 - `savePackage(pkg: PackageInfo): Promise<SavedPackage>`
 - `getPackageById(id: string): Promise<SavedPackage | null>`
@@ -387,6 +411,7 @@ Retrieves all deployment records, sorted by most recent first.
 - `getLatestDeployment(packageId: string): Promise<DeploymentRecord | null>`
 
 **Storage:**
+
 - Uses JSON files: `packages.json` and `deployments.json`
 - Files stored in `/deployer/app/data/`
 - Simple read/write operations with JSON.parse/stringify
@@ -396,6 +421,7 @@ Retrieves all deployment records, sorted by most recent first.
 **Purpose:** Interface with specific hosting platforms
 
 **Interface:**
+
 ```typescript
 interface VendorAdapter {
   name: VendorName;
@@ -406,6 +432,7 @@ interface VendorAdapter {
 ```
 
 **Implementations:**
+
 - **Vercel** - Uses Vercel CLI or API
 - **Railway** - Uses Railway CLI or API
 - **Netlify** - Uses Netlify CLI or API
@@ -414,6 +441,7 @@ interface VendorAdapter {
 - **Fly.io** - Uses Fly CLI
 
 **Deployment Flow:**
+
 1. Validate configuration (API keys, env vars)
 2. Build package locally or trigger remote build
 3. Upload/deploy to vendor platform
@@ -469,18 +497,21 @@ interface VendorAdapter {
 ## Security Considerations
 
 ### Environment Variables
+
 - Stored in `.env` file (gitignored)
 - Never sent to client (except keys for display)
 - Values not persisted in deployment records
 - Only environment variable **keys** stored in records
 
 ### API Keys
+
 - Vendor API keys stored in `.env`
 - Required for deployments
 - Validated before deployment
 - Never exposed in UI or API responses
 
 ### Local-Only Operation
+
 - No external data storage
 - No telemetry or analytics sent
 - All data stays on developer's machine
@@ -491,17 +522,20 @@ interface VendorAdapter {
 ## Performance Considerations
 
 ### Scanning
+
 - Fast directory traversal (only `/packages` scanned)
 - Minimal file I/O (only `package.json` files read)
 - No heavy parsing or analysis
 
 ### Deployment
+
 - Asynchronous execution
 - Non-blocking API (returns status immediately)
 - Status polling for progress updates
 - Logs streamed incrementally
 
 ### Data Persistence
+
 - Lightweight JSON files
 - Read on-demand (not kept in memory)
 - Write atomically (prevents corruption)
@@ -512,17 +546,20 @@ interface VendorAdapter {
 ## Error Handling
 
 ### Scanner Errors
+
 - Missing packages directory → Return empty result
 - Invalid package.json → Skip package, log warning
 - Permission errors → Show helpful error message
 
 ### Deployment Errors
+
 - Missing API keys → Show configuration error
 - Invalid vendor → Reject with 400 error
 - Deployment failure → Save error in record, show to user
 - Network errors → Retry logic in vendor adapters
 
 ### Data Persistence Errors
+
 - File write failures → Show error, don't lose in-memory state
 - JSON parse errors → Show warning, fall back to empty state
 - Disk full → Clear error message with troubleshooting steps
@@ -532,12 +569,14 @@ interface VendorAdapter {
 ## Future Enhancements
 
 ### Phase 2: Frontend UI
+
 - Implement web interface with all planned views
 - Real-time deployment streaming (SSE/WebSockets)
 - Interactive vendor comparison
 - Cost calculator
 
 ### Phase 3: Advanced Features
+
 - Multi-package deployments
 - Deployment rollback
 - Environment variable templates
@@ -545,12 +584,14 @@ interface VendorAdapter {
 - Webhook triggers
 
 ### Phase 4: Data & Analytics
+
 - Migration to SQLite/PostgreSQL
 - Advanced deployment analytics
 - Cost tracking with actual usage
 - Performance monitoring integration
 
 ### Phase 5: Platform Expansion
+
 - Additional vendor adapters (AWS, Azure, Heroku)
 - Docker/Kubernetes support
 - Self-hosted deployment options

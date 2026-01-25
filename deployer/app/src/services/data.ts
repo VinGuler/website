@@ -74,9 +74,7 @@ export async function getPackageById(id: string): Promise<SavedPackage | null> {
   return packages.find((p) => p.id === id) || null;
 }
 
-export async function updatePackageDeployment(
-  packageId: string
-): Promise<void> {
+export async function updatePackageDeployment(packageId: string): Promise<void> {
   const packages = await getAllPackages();
   const packageIndex = packages.findIndex((p) => p.id === packageId);
 
@@ -131,24 +129,17 @@ export async function updateDeploymentStatus(
   }
 }
 
-export async function getDeploymentsByPackage(
-  packageId: string
-): Promise<DeploymentRecord[]> {
+export async function getDeploymentsByPackage(packageId: string): Promise<DeploymentRecord[]> {
   const deployments = await getAllDeployments();
   return deployments.filter((d) => d.packageId === packageId);
 }
 
-export async function getLatestDeployment(
-  packageId: string
-): Promise<DeploymentRecord | null> {
+export async function getLatestDeployment(packageId: string): Promise<DeploymentRecord | null> {
   const deployments = await getDeploymentsByPackage(packageId);
   if (deployments.length === 0) return null;
 
   // Sort by startedAt descending
-  deployments.sort(
-    (a, b) =>
-      new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime()
-  );
+  deployments.sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
 
   return deployments[0];
 }

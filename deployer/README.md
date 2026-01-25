@@ -52,6 +52,7 @@ Navigate to [http://localhost:3000](http://localhost:3000)
 ### 1. Scan Your Repository
 
 Click the **"Scan Repository"** button on the Dashboard tab. The deployer will:
+
 - Detect all packages in your `/packages` directory
 - Analyze each package's type, framework, and build configuration
 - Generate deployment recommendations
@@ -59,6 +60,7 @@ Click the **"Scan Repository"** button on the Dashboard tab. The deployer will:
 ### 2. Review Deployment Plans
 
 Switch to the **"Deployment Plan"** tab to see:
+
 - Recommended vendors for each package
 - Cost estimates
 - Required build commands
@@ -67,6 +69,7 @@ Switch to the **"Deployment Plan"** tab to see:
 ### 3. Deploy a Package
 
 Go to the **"Deploy"** tab:
+
 1. Select a package from the dropdown
 2. Choose a vendor (recommended options are highlighted)
 3. Enter required environment variables
@@ -169,11 +172,13 @@ The deployer automatically detects:
 ## Vendor Recommendations
 
 ### Frontend Packages (Vite/Vue)
+
 - **Vercel** (Recommended): Zero-config deployment, global CDN, $0-20/month
 - **Netlify**: Continuous deployment, forms handling, $0-19/month
 - **Cloudflare Pages**: Unlimited bandwidth, Workers support, $0/month
 
 ### Backend Packages (Express/Node)
+
 - **Railway** (Recommended): Simple deployment, built-in databases, $5-20/month
 - **Render**: Free tier available, managed databases, $0-7/month
 - **Fly.io**: Global distribution, Dockerfile support, $0-10/month
@@ -231,15 +236,18 @@ export class MyVendorAdapter implements VendorAdapter {
 ## Troubleshooting
 
 ### Packages Not Detected
+
 - Ensure packages are in the `/packages` directory
 - Check that each package has a valid `package.json`
 
 ### Deployment Fails
+
 - Verify environment variables are set correctly
 - Check vendor API token has proper permissions
 - Review deployment logs for specific errors
 
 ### Build Errors
+
 - Ensure TypeScript is installed: `npm install`
 - Run type check: `npm run type-check`
 
@@ -257,6 +265,7 @@ ISC
 ## Support
 
 For issues or questions about this deployer, check:
+
 - The deployment logs in the UI
 - The console output from the dev server
 - Vendor-specific documentation for API usage
