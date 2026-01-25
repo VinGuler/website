@@ -1,0 +1,25 @@
+{
+  "name": "deployer",
+  "version": "1.0.0",
+  "description": "Local deployment tool for the monorepo",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "npm run build:client && tsx watch --clear-screen=false src/server/index.ts",
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "tsc",
+    "build:client": "tsc -p src/client/tsconfig.json",
+    "start": "node dist/server/index.js",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "express": "^5.0.1",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.9.3"
+  }
+}

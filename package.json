@@ -27,7 +27,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "deployer": "cd deployer/app && npm install && npm run dev"
   },
   "lint-staged": {
     "*.{js,ts,vue,json,md}": "prettier --write",

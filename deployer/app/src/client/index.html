@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monorepo Deployer</title>
+    <link rel="stylesheet" href="/client/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Monorepo Deployer</h1>
+            <p class="subtitle">Automated deployment tool for your monorepo packages</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-btn" data-tab="plan">Deployment Plan</button>
+            <button class="tab-btn" data-tab="deploy">Deploy</button>
+            <button class="tab-btn" data-tab="history">History</button>
+        </nav>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="section">
+                <div class="section-header">
+                    <h2>Detected Packages</h2>
+                    <button id="scan-btn" class="btn btn-primary">Scan Repository</button>
+                </div>
+                <div id="packages-list" class="packages-grid">
+                    <p class="placeholder">Click "Scan Repository" to detect packages</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deployment Plan Tab -->
+        <div id="plan" class="tab-content">
+            <div class="section">
+                <h2>Deployment Plans</h2>
+                <div id="plans-list">
+                    <p class="placeholder">Scan packages first to see deployment plans</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deploy Tab -->
+        <div id="deploy" class="tab-content">
+            <div class="section">
+                <h2>Deploy Package</h2>
+                <form id="deploy-form">
+                    <div class="form-group">
+                        <label for="package-select">Select Package:</label>
+                        <select id="package-select" required>
+                            <option value="">-- Select a package --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="vendor-select">Select Vendor:</label>
+                        <select id="vendor-select" required>
+                            <option value="">-- Select a vendor --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Environment Variables:</label>
+                        <div id="env-vars-inputs"></div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Deploy</button>
+                </form>
+
+                <div id="deployment-progress" class="deployment-progress hidden">
+                    <h3>Deployment Status</h3>
+                    <div class="status-badge" id="status-badge">Pending</div>
+                    <div class="logs" id="deployment-logs"></div>
+                    <div id="deployment-url" class="deployment-url hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Tab -->
+        <div id="history" class="tab-content">
+            <div class="section">
+                <h2>Deployment History</h2>
+                <div id="history-list">
+                    <p class="placeholder">No deployments yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/client/app.js"></script>
+</body>
+</html>
