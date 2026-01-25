@@ -68,4 +68,11 @@ export default [
 
   // Prettier config (must be last to override other formatting rules)
   eslintConfigPrettier,
+
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    },
+  },
 ];

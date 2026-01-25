@@ -1,9 +1,4 @@
-import type {
-  PackageInfo,
-  DeploymentPlan,
-  DeploymentOption,
-  VendorName,
-} from '../types/index.js';
+import type { PackageInfo, DeploymentPlan, DeploymentOption } from '../types/index.js';
 import { logger } from '../utils/logger.js';
 
 export class Planner {
@@ -62,6 +57,13 @@ export class Planner {
           'Zero config for Vite',
         ],
         limitations: ['Free tier: 100GB bandwidth/month'],
+        signupUrl: 'https://vercel.com/signup',
+        setupInstructions: [
+          'Connect your GitHub/GitLab repository',
+          'Vercel auto-detects Vite projects',
+          'Configure environment variables if needed',
+          'Deploy with one click',
+        ],
       });
     }
 
@@ -76,13 +78,15 @@ export class Planner {
         currency: 'USD',
         period: 'month',
       },
-      features: [
-        'Continuous deployment',
-        'Global CDN',
-        'Forms handling',
-        'Split testing',
-      ],
+      features: ['Continuous deployment', 'Global CDN', 'Forms handling', 'Split testing'],
       limitations: ['Free tier: 100GB bandwidth/month'],
+      signupUrl: 'https://app.netlify.com/signup',
+      setupInstructions: [
+        'Connect to Git provider',
+        'Select your repository',
+        'Configure build settings',
+        'Deploy site',
+      ],
     });
 
     // Cloudflare Pages
@@ -96,12 +100,15 @@ export class Planner {
         currency: 'USD',
         period: 'month',
       },
-      features: [
-        'Unlimited bandwidth',
-        'Global CDN',
-        'Cloudflare Workers integration',
-      ],
+      features: ['Unlimited bandwidth', 'Global CDN', 'Cloudflare Workers integration'],
       limitations: ['500 builds/month on free tier'],
+      signupUrl: 'https://dash.cloudflare.com/sign-up',
+      setupInstructions: [
+        'Create Cloudflare account',
+        'Navigate to Pages',
+        'Connect Git repository',
+        'Configure build and deploy',
+      ],
     });
 
     return options;
@@ -129,6 +136,14 @@ export class Planner {
         'Simple pricing',
       ],
       limitations: ['$5 free credit/month'],
+      signupUrl: 'https://railway.app/',
+      setupInstructions: [
+        'Sign up with GitHub',
+        'Create new project from repo',
+        'Railway auto-detects Node.js',
+        'Add environment variables',
+        'Deploy automatically',
+      ],
     });
 
     // Render
@@ -149,6 +164,14 @@ export class Planner {
         'Zero-downtime deploys',
       ],
       limitations: ['Free tier spins down after inactivity'],
+      signupUrl: 'https://dashboard.render.com/register',
+      setupInstructions: [
+        'Connect GitHub/GitLab account',
+        'Create new Web Service',
+        'Configure build and start commands',
+        'Set environment variables',
+        'Deploy',
+      ],
     });
 
     // Fly.io
@@ -169,6 +192,14 @@ export class Planner {
         'Dockerfile support',
       ],
       limitations: ['Requires Docker configuration'],
+      signupUrl: 'https://fly.io/app/sign-up',
+      setupInstructions: [
+        'Install Fly CLI',
+        'Run fly auth signup',
+        'Create Dockerfile in your project',
+        'Run fly launch to deploy',
+        'Configure secrets with fly secrets set',
+      ],
     });
 
     return options;
@@ -222,9 +253,7 @@ export class Planner {
     }
 
     if (packageInfo.requiredEnvVars.length > 0) {
-      notes.push(
-        `Environment variables required: ${packageInfo.requiredEnvVars.join(', ')}`
-      );
+      notes.push(`Environment variables required: ${packageInfo.requiredEnvVars.join(', ')}`);
     }
 
     if (packageInfo.type === 'frontend' && packageInfo.buildTool === 'vite') {

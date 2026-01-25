@@ -8,6 +8,7 @@ let currentDeployment: any = null;
 
 // DOM Elements
 const scanBtn = document.getElementById('scan-btn') as HTMLButtonElement;
+const clearDataBtn = document.getElementById('clear-data-btn') as HTMLButtonElement;
 const packagesList = document.getElementById('packages-list') as HTMLDivElement;
 const plansList = document.getElementById('plans-list') as HTMLDivElement;
 const packageSelect = document.getElementById('package-select') as HTMLSelectElement;
@@ -19,6 +20,30 @@ const statusBadge = document.getElementById('status-badge') as HTMLDivElement;
 const deploymentLogs = document.getElementById('deployment-logs') as HTMLDivElement;
 const deploymentUrl = document.getElementById('deployment-url') as HTMLDivElement;
 const historyList = document.getElementById('history-list') as HTMLDivElement;
+
+// Initialize - Load existing packages on page load
+async function initialize() {
+  await loadExistingPackages();
+}
+
+// Load existing packages from data
+async function loadExistingPackages() {
+  try {
+    const response = await fetch(`${API_BASE}/api/packages`);
+    const result = await response.json();
+
+    if (result.success && result.data.length > 0) {
+      packages = result.data;
+      await loadDeploymentPlans();
+      renderPackages();
+      renderDeploymentPlans();
+      populatePackageSelect();
+    }
+  } catch (error) {
+    console.error('Error loading packages:', error);
+    // Not a critical error, user can still scan
+  }
+}
 
 // Tab Navigation
 document.querySelectorAll('.tab-btn').forEach((btn) => {
@@ -69,10 +94,50 @@ scanBtn.addEventListener('click', async () => {
   }
 });
 
+// Clear All Data
+clearDataBtn.addEventListener('click', async () => {
+  const confirmed = confirm(
+    'Are you sure you want to clear all data? This will delete all packages and deployment history.'
+  );
+
+  if (!confirmed) return;
+
+  clearDataBtn.disabled = true;
+  clearDataBtn.textContent = 'Clearing...';
+
+  try {
+    const response = await fetch(`${API_BASE}/api/data`, {
+      method: 'DELETE',
+    });
+    const result = await response.json();
+
+    if (result.success) {
+      // Clear local state
+      packages = [];
+      deploymentPlans = [];
+
+      // Clear UI
+      renderPackages();
+      renderDeploymentPlans();
+      packageSelect.innerHTML = '<option value="">-- Select a package --</option>';
+      historyList.innerHTML = '<p class="placeholder">No deployments yet</p>';
+
+      alert('All data cleared successfully');
+    } else {
+      alert(`Failed to clear data: ${result.error}`);
+    }
+  } catch (error) {
+    alert(`Error clearing data: ${error}`);
+  } finally {
+    clearDataBtn.disabled = false;
+    clearDataBtn.textContent = 'Clear All Data';
+  }
+});
+
 // Render Packages
 function renderPackages() {
   if (packages.length === 0) {
-    packagesList.innerHTML = '<p class="placeholder">No packages found</p>';
+    packagesList.innerHTML = '<p class="placeholder">No packages found. Click "Scan Repository" to detect packages.</p>';
     return;
   }
 
@@ -80,14 +145,45 @@ function renderPackages() {
     .map(
       (pkg) => `
     <div class="package-card">
-      <div class="package-name">${pkg.name}</div>
-      <span class="package-type type-${pkg.type}">${pkg.type}</span>
+      <div class="package-header">
+        <div class="package-name">${pkg.name}</div>
+        <span class="package-type type-${pkg.type}">${pkg.type}</span>
+      </div>
+
       <div class="package-details">
         <div><strong>Framework:</strong> ${pkg.framework}</div>
         <div><strong>Build Tool:</strong> ${pkg.buildTool}</div>
         ${pkg.nodeVersion ? `<div><strong>Node:</strong> ${pkg.nodeVersion}</div>` : ''}
         ${pkg.hasDatabase ? `<div><strong>Database:</strong> ${pkg.databaseType}</div>` : ''}
       </div>
+
+      ${pkg.latestDeployment ? `
+        <div class="deployment-stats">
+          <div class="stat-title">Latest Deployment</div>
+          <div class="stat-row">
+            <span class="stat-label">Vendor:</span>
+            <span class="vendor-badge">${pkg.latestDeployment.vendor}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Status:</span>
+            <span class="status-badge status-${pkg.latestDeployment.status}">${pkg.latestDeployment.status}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Deployed:</span>
+            <span>${new Date(pkg.latestDeployment.deployedAt).toLocaleString()}</span>
+          </div>
+          ${pkg.latestDeployment.deploymentUrl ? `
+            <div class="stat-row">
+              <a href="${pkg.latestDeployment.deploymentUrl}" target="_blank" class="deployment-link">View Deployment →</a>
+            </div>
+          ` : ''}
+        </div>
+        <div class="deployment-count">Total Deployments: ${pkg.deploymentCount}</div>
+      ` : `
+        <div class="deployment-stats">
+          <div class="stat-title">Not Deployed Yet</div>
+        </div>
+      `}
     </div>
   `
     )
@@ -355,3 +451,6 @@ function renderDeploymentHistory(deployments: any[]) {
     )
     .join('');
 }
+
+// Initialize app on page load
+initialize();

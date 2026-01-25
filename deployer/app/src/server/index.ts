@@ -41,20 +41,13 @@ app.get('/', (req, res) => {
 });
 
 // Error handling middleware
-app.use(
-  (
-    err: Error,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    logger.error(`Error: ${err.message}`);
-    res.status(500).json({
-      success: false,
-      error: err.message,
-    });
-  }
-);
+app.use((err: Error, req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  logger.error(`Error: ${err.message}`);
+  res.status(500).json({
+    success: false,
+    error: err.message,
+  });
+});
 
 // Start server
 app.listen(PORT, () => {

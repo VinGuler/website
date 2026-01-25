@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Full-Stack Example - Todo App</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Todo App</h1>
+      <p class="subtitle">A simple full-stack example</p>
+
+      <div class="card">
+        <form id="todo-form">
+          <input
+            type="text"
+            id="todo-input"
+            placeholder="Enter a new todo..."
+            required
+          />
+          <button type="submit">Add Todo</button>
+        </form>
+      </div>
+
+      <div id="loading" class="loading hidden">Loading...</div>
+
+      <div id="todo-list"></div>
+    </div>
+
+    <script src="/client/app.js"></script>
+  </body>
+</html>

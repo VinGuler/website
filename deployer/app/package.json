@@ -5,21 +5,32 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "npm run build:client && tsx watch --clear-screen=false src/server/index.ts",
+    "deployer": "concurrently \"npm run dev:client\" \"npm run dev:server\" \"npm run open\"",
+    "dev": "npm run deployer",
+    "dev:client": "vite",
+    "dev:server": "tsx watch --clear-screen=false src/server/index.ts",
+    "open": "node -e \"setTimeout(() => { const { exec } = require('child_process'); exec('start http://localhost:5173'); }, 2000)\"",
     "build": "npm run build:server && npm run build:client",
     "build:server": "tsc",
-    "build:client": "tsc -p src/client/tsconfig.json",
+    "build:client": "vite build",
     "start": "node dist/server/index.js",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "express": "^5.0.1",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "vue": "^3.5.26",
+    "pinia": "^3.0.4"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^22.10.5",
+    "@vitejs/plugin-vue": "^6.0.3",
+    "@vue/tsconfig": "^0.8.1",
+    "concurrently": "^9.1.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "vue-tsc": "^3.2.2"
   }
 }

@@ -6,13 +6,14 @@ export default defineConfig({
     projects: [
       {
         test: {
-          name: 'client',
-          root: 'packages/client',
+          name: 'client-example',
+          root: 'packages/client-example',
           environment: 'jsdom',
         },
         plugins: [vue()],
       },
-      'packages/server/vitest.config.ts',
+      'packages/server-example/vitest.config.ts',
+      'packages/full-stack-example/vitest.config.ts',
     ],
   },
 });

@@ -33,6 +33,8 @@ export interface DeploymentOption {
   };
   features: string[];
   limitations?: string[];
+  signupUrl: string;
+  setupInstructions: string[];
 }
 
 export interface DeploymentPlan {
@@ -77,4 +79,26 @@ export interface VendorAdapter {
   deploy(config: DeploymentConfig): Promise<DeploymentStatus>;
   validate(config: DeploymentConfig): Promise<boolean>;
   getRequiredEnvVars(): string[];
+}
+
+// Data persistence types (like SQL tables)
+export interface SavedPackage extends PackageInfo {
+  id: string; // unique identifier
+  scannedAt: string; // ISO timestamp
+  lastDeployedAt?: string; // ISO timestamp
+  deploymentCount: number;
+}
+
+export interface DeploymentRecord {
+  id: string; // unique identifier
+  packageId: string; // foreign key to SavedPackage
+  packageName: string; // denormalized for easier querying
+  vendor: VendorName;
+  status: 'pending' | 'building' | 'deploying' | 'success' | 'failed';
+  startedAt: string; // ISO timestamp
+  completedAt?: string; // ISO timestamp
+  logs: string[];
+  error?: string;
+  deploymentUrl?: string;
+  envVars?: string[]; // just keys, not values (for security)
 }

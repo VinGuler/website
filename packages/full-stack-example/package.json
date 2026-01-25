@@ -1,0 +1,28 @@
+{
+  "name": "full-stack-example",
+  "version": "1.0.0",
+  "description": "Simple full-stack example app",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "npm run build:client && tsx watch --clear-screen=false src/server/index.ts",
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "tsc",
+    "build:client": "tsc -p src/client/tsconfig.json",
+    "start": "node dist/server/index.js",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jsdom": "^27.0.0",
+    "@types/node": "^22.10.5",
+    "@types/supertest": "^6.0.3",
+    "jsdom": "^27.4.0",
+    "supertest": "^7.2.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.9.3"
+  }
+}
