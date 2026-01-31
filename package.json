@@ -10,15 +10,9 @@
   "type": "module",
   "private": true,
   "workspaces": [
-    "packages/client-example",
-    "packages/server-example",
-    "packages/full-stack-example"
+    "packages/*"
   ],
   "scripts": {
-    "dev:client-server-example": "concurrently \"npm run dev:client-example\" \"npm run dev:server-example\"",
-    "dev:client-example": "npm run dev -w client-example",
-    "dev:server-example": "npm run dev -w server-example",
-    "dev:full-stack-example": "npm run dev -w full-stack-example",
     "build": "npm run build -w server-example && npm run build -w client-example",
     "build:client-example": "npm run build -w client-example",
     "build:server-example": "npm run build -w server-example",
@@ -31,8 +25,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky",
-    "deployer": "cd deployer/app && npm install && npm run build && npm start",
-    "deployer:dev": "cd deployer/app && npm run dev"
+    "deployer": "cd deployer/app && npm install && npm run build && npm start"
   },
   "lint-staged": {
     "*.{js,ts,vue,json,md}": "prettier --write",

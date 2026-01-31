@@ -11,9 +11,5 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "references": [
-    { "path": "./packages/client-example" },
-    { "path": "./packages/server-example" },
-    { "path": "./packages/full-stack-example" }
-  ]
+  "references": []
 }
