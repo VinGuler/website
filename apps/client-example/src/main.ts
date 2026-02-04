@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+import { log } from '@website/utils';
 
 import App from './App.vue';
 import router from './router';
@@ -10,3 +11,5 @@ app.use(createPinia());
 app.use(router);
 
 app.mount('#app');
+
+log('client-example', 'App mounted');

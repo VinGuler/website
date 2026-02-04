@@ -1,6 +1,7 @@
 import express from 'express';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { log } from '@website/utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -94,7 +95,7 @@ export { app };
 // Start server only if not imported
 if (import.meta.url === `file://${process.argv[1]}`) {
   app.listen(PORT, () => {
-    console.log(`Full-stack example server running on http://localhost:${PORT}`);
-    console.log(`Open your browser to http://localhost:${PORT} to get started`);
+    log('full-stack-example', `Server running on http://localhost:${PORT}`);
+    log('full-stack-example', `Open your browser to http://localhost:${PORT} to get started`);
   });
 }

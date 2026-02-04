@@ -8,7 +8,7 @@ import vueDevTools from 'vite-plugin-vue-devtools';
 export default defineConfig({
   plugins: [vue(), vueDevTools()],
   build: {
-    outDir: '../server/dist/public',
+    outDir: '../server-example/dist/public',
     emptyOutDir: true,
   },
   resolve: {

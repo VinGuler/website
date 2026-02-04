@@ -37,3 +37,6 @@ __screenshots__/
 
 # ENV
 .env
+
+# Turborepo
+.turbo

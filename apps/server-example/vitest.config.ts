@@ -3,13 +3,10 @@ import { fileURLToPath } from 'node:url';
 
 export default defineConfig({
   test: {
-    name: 'full-stack-example',
+    name: 'server-example',
     root: fileURLToPath(new URL('./', import.meta.url)),
+    environment: 'node',
     include: ['src/**/*.{test,spec}.{js,ts}'],
-    environmentMatchGlobs: [
-      ['src/client/**', 'jsdom'],
-      ['src/server/**', 'node'],
-      ['src/__tests__/**', 'node'],
-    ],
+    exclude: ['dist/**', 'node_modules/**'],
   },
 });

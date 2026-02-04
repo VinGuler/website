@@ -1,5 +1,17 @@
 {
   "permissions": {
-    "allow": ["Bash(npm install:*)", "Bash(npm run build:*)", "Bash(npm run build:client:*)"]
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run build:client:*)",
+      "Bash(xargs:*)",
+      "Bash(wc:*)",
+      "Bash(tree:*)",
+      "Bash(npx turbo build)",
+      "Bash(npm --version)",
+      "Bash(npx vitest:*)",
+      "Bash(npx turbo build:*)",
+      "Bash(npx turbo lint:*)"
+    ]
   }
 }
