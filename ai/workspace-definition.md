@@ -25,7 +25,7 @@ Templates are "Gold Masters" located in `/templates`. They are designed for inst
 
 - **Tier 1: Only Client**: A pure Vue 3 + Vite SPA. Optimized for landing pages or tools without a custom backend. Supports pre-rendering (SSG) for SEO.
 - **Tier 2: Client + Server**: A Vue 3 SPA paired with a Node.js (Express) backend. Used for apps requiring API proxies, secret management, or server-side logic.
-- **Tier 3: Full Stack (Client + Server + DB)**: The complete factory unit. Includes Tier 2 plus a connection to the shared `@workspace/database` package, pre-configured with Prisma schemas and migration paths.
+- **Tier 3: Full Stack (Client + Server + DB)**: The complete factory unit. Includes Tier 2 plus a connection to the shared `@workspace/database` package, pre-configured with Prisma schemas and migration paths - important to note schemas are per app, and better be at each apps folder.
 
 ## 4. Technical Stack
 
@@ -36,7 +36,7 @@ Templates are "Gold Masters" located in `/templates`. They are designed for inst
 
 ## 5. Portability & Standalone Exports
 
-The workspace is designed to produce "Home Assignments" or independent repositories from within the monorepo environment.
+The workspace is designed to produce simple apps (for small ideas) and "Home Assignments" or independent repositories from within the monorepo environment.
 
 - **The "Flattening" Process**: Utilizing `pnpm deploy`, a skill extracts a specific app and physically bundles its internal `@workspace` dependencies into a standalone folder.
 - **Assignment Readiness**: Exported repos are "clone-and-run." They feature their own `package.json` (free of workspace protocols), a fresh Git history, and a `docker-compose.yml` for instant local Postgres provisioning by third parties.
