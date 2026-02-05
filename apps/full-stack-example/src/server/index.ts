@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { type Express } from 'express';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { log } from '@website/utils';
@@ -6,7 +6,7 @@ import { log } from '@website/utils';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const app = express();
+const app: Express = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware

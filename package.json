@@ -9,11 +9,7 @@
   "author": "Niv Guler",
   "type": "module",
   "private": true,
-  "packageManager": "npm@11.6.2",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "packageManager": "pnpm@10.5.2",
   "scripts": {
     "dev": "turbo dev",
     "dev:client-example": "turbo dev --filter=client-example",
@@ -34,16 +30,22 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky",
-    "deployer": "cd deployer/app && npm install && npm run build && npm start",
-    "deployer:dev": "cd deployer/app && npm run dev"
+    "deployer": "cd deployer/app && pnpm install && pnpm run build && pnpm start",
+    "deployer:dev": "cd deployer/app && pnpm run dev"
   },
   "lint-staged": {
     "*.{js,ts,vue,json,md}": "prettier --write",
     "*.{js,ts,vue}": "eslint --fix"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
     "@types/node": "^22.10.5",
+    "@vitejs/plugin-vue": "^6.0.3",
     "concurrently": "^9.1.2",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",

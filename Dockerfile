@@ -1,25 +1,27 @@
 # Build stage
 FROM node:22-alpine AS build
 
+RUN corepack enable pnpm
+
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-COPY apps/client-example/package*.json ./apps/client-example/
-COPY apps/server-example/package*.json ./apps/server-example/
-COPY packages/utils/package*.json ./packages/utils/
+# Copy workspace config and package files
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY apps/client-example/package.json ./apps/client-example/
+COPY apps/server-example/package.json ./apps/server-example/
+COPY packages/utils/package.json ./packages/utils/
 
 # Install dependencies
-RUN npm install
+RUN pnpm install --frozen-lockfile
 
 # Copy source files
 COPY . .
 
 # Build all packages (turbo handles dependency order)
-RUN npx turbo build
+RUN pnpm turbo build
 
 # Prune dev dependencies for production
-RUN npm prune --omit=dev
+RUN pnpm prune --prod
 
 # Production stage
 FROM node:22-alpine AS production

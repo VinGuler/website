@@ -5,8 +5,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "npm run build:client && tsx watch --clear-screen=false src/server/index.ts",
-    "build": "npm run build:server && npm run build:client",
+    "dev": "pnpm run build:client && tsx watch --clear-screen=false src/server/index.ts",
+    "build": "pnpm run build:server && pnpm run build:client",
     "build:server": "tsc",
     "build:client": "tsc -p src/client/tsconfig.json",
     "start": "node dist/server/index.js",
@@ -15,11 +15,12 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@website/utils": "*",
+    "@website/utils": "workspace:*",
     "express": "^5.0.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/express-serve-static-core": "^5.1.1",
     "@types/jsdom": "^27.0.0",
     "@types/node": "^22.10.5",
     "@types/supertest": "^6.0.3",
