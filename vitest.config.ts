@@ -7,14 +7,14 @@ export default defineConfig({
       {
         plugins: [vue()],
         test: {
-          name: 'client-example',
-          root: 'apps/client-example',
+          name: 'landing-page',
+          root: 'templates/landing-page',
           environment: 'jsdom',
           exclude: ['e2e/**', 'node_modules/**'],
         },
       },
-      'apps/server-example/vitest.config.ts',
-      'apps/full-stack-example/vitest.config.ts',
+      'templates/api-server/vitest.config.ts',
+      'templates/client-server/vitest.config.ts',
     ],
   },
 });

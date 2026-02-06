@@ -12,9 +12,10 @@
     "noEmit": true
   },
   "references": [
-    { "path": "./apps/client-example" },
-    { "path": "./apps/server-example" },
-    { "path": "./apps/full-stack-example" },
+    { "path": "./templates/landing-page" },
+    { "path": "./templates/api-server" },
+    { "path": "./templates/client-server" },
+    { "path": "./templates/client-server-database" },
     { "path": "./packages/utils" }
   ]
 }

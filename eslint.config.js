@@ -5,6 +5,11 @@ import vueParser from 'vue-eslint-parser';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
 
+/**
+ * Add server apps when we add them
+ */
+const serverApps = ['templates/api-server/**/*.ts'];
+
 export default [
   // Global ignores
   {
@@ -33,27 +38,10 @@ export default [
     },
   },
 
-  // TypeScript files in client
-  {
-    files: ['**/client/**/*.{ts,tsx}'],
-    languageOptions: {
-      parser: tseslint.parser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-      },
-    },
-  },
-
   // Server-specific settings
   {
-    files: ['**/server/**/*.ts'],
+    files: serverApps,
     languageOptions: {
-      parser: tseslint.parser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-      },
       globals: {
         ...globals.node,
       },

@@ -37,7 +37,7 @@ if (hasPublicDir) {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  log('server-example', `Server is running on port ${PORT}`);
+  log('info', 'api-server', `Server is running on port ${PORT}`);
 });
 
 export { app };

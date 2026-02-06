@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
   plugins: [vue()],
   test: {
-    name: 'client-example',
+    name: 'landing-page',
     environment: 'jsdom',
     exclude: [...configDefaults.exclude, 'e2e/**'],
     root: fileURLToPath(new URL('./', import.meta.url)),

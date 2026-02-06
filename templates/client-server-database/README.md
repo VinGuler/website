@@ -20,7 +20,7 @@ This example includes:
 ## Project Structure
 
 ```
-packages/full-stack-example/
+packages/client-server/
 ├── src/
 │   ├── server/
 │   │   └── index.ts          # Express server with REST API

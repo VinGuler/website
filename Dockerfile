@@ -7,8 +7,8 @@ WORKDIR /app
 
 # Copy workspace config and package files
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
-COPY apps/client-example/package.json ./apps/client-example/
-COPY apps/server-example/package.json ./apps/server-example/
+COPY apps/landing-page/package.json ./apps/landing-page/
+COPY apps/api-server/package.json ./apps/api-server/
 COPY packages/utils/package.json ./packages/utils/
 
 # Install dependencies
@@ -31,7 +31,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Copy built files and production node_modules
-COPY --from=build /app/apps/server-example/dist ./dist
+COPY --from=build /app/apps/api-server/dist ./dist
 COPY --from=build /app/node_modules ./node_modules
 
 EXPOSE 3000

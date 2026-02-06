@@ -16,11 +16,11 @@
 
 **Existing apps** (`apps/`):
 
-| App                  | Type       | Stack                             | Status                   |
-| -------------------- | ---------- | --------------------------------- | ------------------------ |
-| `client-example`     | SPA        | Vue 3 + Vite + Pinia + Vue Router | Builds, 1 test passing   |
-| `server-example`     | API        | Express v5 + tsx                  | Builds, 3 tests passing  |
-| `full-stack-example` | Full-stack | Express v5 + vanilla TS client    | Builds, 14 tests passing |
+| App             | Type       | Stack                             | Status                   |
+| --------------- | ---------- | --------------------------------- | ------------------------ |
+| `landing-page`  | SPA        | Vue 3 + Vite + Pinia + Vue Router | Builds, 1 test passing   |
+| `api-server`    | API        | Express v5 + tsx                  | Builds, 3 tests passing  |
+| `client-server` | Full-stack | Express v5 + vanilla TS client    | Builds, 14 tests passing |
 
 **Existing packages** (`packages/`):
 

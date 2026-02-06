@@ -12,4 +12,4 @@ app.use(router);
 
 app.mount('#app');
 
-log('client-example', 'App mounted');
+log('info', 'landing-page', 'App mounted');

@@ -1,0 +1,32 @@
+{
+  "name": "client-server-database",
+  "version": "1.0.0",
+  "description": "Simple full-stack example app with database",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm run build:client && tsx watch --clear-screen=false src/server/index.ts",
+    "build": "pnpm run build:server && pnpm run build:client",
+    "build:server": "tsc",
+    "build:client": "tsc -p src/client/tsconfig.json",
+    "start": "node dist/server/index.js",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@website/utils": "workspace:*",
+    "express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/express-serve-static-core": "^5.1.1",
+    "@types/jsdom": "^27.0.0",
+    "@types/node": "^22.10.5",
+    "@types/supertest": "^6.0.3",
+    "jsdom": "^27.4.0",
+    "supertest": "^7.2.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.9.3"
+  }
+}
