@@ -68,7 +68,7 @@ importers:
 
   templates/api-server:
     dependencies:
-      '@website/utils':
+      '@workspace/utils':
         specifier: workspace:*
         version: link:../../packages/utils
       express:
@@ -93,7 +93,7 @@ importers:
 
   templates/client-server:
     dependencies:
-      '@website/utils':
+      '@workspace/utils':
         specifier: workspace:*
         version: link:../../packages/utils
       express:
@@ -130,7 +130,7 @@ importers:
 
   templates/client-server-database:
     dependencies:
-      '@website/utils':
+      '@workspace/utils':
         specifier: workspace:*
         version: link:../../packages/utils
       express:
@@ -167,7 +167,7 @@ importers:
 
   templates/landing-page:
     dependencies:
-      '@website/utils':
+      '@workspace/utils':
         specifier: workspace:*
         version: link:../../packages/utils
       pinia:

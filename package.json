@@ -26,7 +26,7 @@
     "build:template:client-server": "turbo build --filter=client-server",
     "build:template:client-server-database": "turbo build --filter=client-server-database",
     "build:template:landing-page": "turbo build --filter=landing-page",
-    "build:utils": "turbo build --filter=@website/utils",
+    "build:utils": "turbo build --filter=@workspace/utils",
     "test": "vitest --run",
     "test:coverage": "vitest run --coverage",
     "test:api-server": "vitest --run --project api-server",

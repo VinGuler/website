@@ -18,7 +18,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@website/utils": "workspace:*",
+    "@workspace/utils": "workspace:*",
     "express": "5.2.1"
   },
   "devDependencies": {

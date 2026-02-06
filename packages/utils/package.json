@@ -1,5 +1,5 @@
 {
-  "name": "@website/utils",
+  "name": "@workspace/utils",
   "version": "1.0.0",
   "description": "Shared utilities for the website monorepo",
   "type": "module",

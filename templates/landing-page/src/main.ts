@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import { log } from '@website/utils';
+import { log } from '@workspace/utils';
 
 import App from './App.vue';
 import router from './router';

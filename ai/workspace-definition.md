@@ -19,13 +19,14 @@ The workspace utilizes a high-performance monorepo strategy to share logic while
 - **`/packages`**: Internal shared libraries (e.g., `@workspace/database`, `@workspace/ui-shared`).
 - **`/apps`**: Deployable project folders that consume the internal packages.
 
-## 3. Template Tiers
+## 3. Templates
 
-Templates are "Gold Masters" located in `/templates`. They are designed for instant scaffolding with zero manual configuration.
+Templates are "Gold Masters" located in `/templates`. They are designed for instant scaffolding with zero manual configuration. A Scaffolder skill copies and configures a template into `/apps` to create a new project.
 
-- **Tier 1: Only Client**: A pure Vue 3 + Vite SPA. Optimized for landing pages or tools without a custom backend. Supports pre-rendering (SSG) for SEO.
-- **Tier 2: Client + Server**: A Vue 3 SPA paired with a Node.js (Express) backend. Used for apps requiring API proxies, secret management, or server-side logic.
-- **Tier 3: Full Stack (Client + Server + DB)**: The complete factory unit. Includes Tier 2 plus a connection to the shared `@workspace/database` package, pre-configured with Prisma schemas and migration paths - important to note schemas are per app, and better be at each apps folder.
+- **`landing-page`** (Client only): A pure Vue 3 + Vite SPA. Optimized for landing pages, static tools, or anything without a custom backend. Supports pre-rendering (SSG) for SEO.
+- **`api-server`** (Server only): A Node.js (Express) API server with minimal UI for development. Used for backend-focused projects, microservices, or API-first designs.
+- **`client-server`** (Client + Server): A Vue 3 SPA paired with a Node.js (Express) backend. Used for home assignments, apps requiring API proxies, secret management, or in-memory server-side logic.
+- **`client-server-database`** (Full Stack): The complete factory unit. Includes client + server plus a connection to the shared `@workspace/database` package, pre-configured with Prisma schemas and migration paths. Prisma schemas are per-app (inside each app's folder), not centralized. This is the primary template for full product ideas.
 
 ## 4. Technical Stack
 
@@ -43,9 +44,9 @@ The workspace is designed to produce simple apps (for small ideas) and "Home Ass
 
 ## 6. Railway Deployment
 
-Railway is the unified hosting vendor for the entire factory.
+Railway is the unified hosting vendor for the entire factory. Deployment is handled automatically — Railway connects to the repo and deploys on push. No special workspace-level deployment configuration is needed.
 
-- **Monorepo Integration**: Railway connects to the Workspace root and deploys multiple services from the `/apps` directory within a single project.
-- **Subdomain Routing**: Configured via a wildcard CNAME. Apps are automatically served via `app-name.yourdomain.com`.
-- **Infrastructure**: Database provisioning (Postgres) and environment variables are managed in the Railway dashboard. Servers and databases reside in the same private network for optimal latency.
-- **SSL & Assets**: Railway handles SSL certificates automatically and serves Vue static assets via their global edge network.
+- **Monorepo Integration**: Railway deploys multiple services from the `/apps` directory within a single project.
+- **Subdomain Routing**: Configured via a wildcard CNAME. Apps are served via `app-name.yourdomain.com`.
+- **Infrastructure**: Database provisioning (Postgres) and environment variables are managed in the Railway dashboard.
+- **SSL & Assets**: Railway handles SSL certificates automatically and serves static assets via their global edge network.
