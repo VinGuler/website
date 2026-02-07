@@ -20,7 +20,7 @@ describe('App', () => {
     });
 
     const wrapper = mount(App);
-    expect(wrapper.find('h1').text()).toBe('Todo List');
+    expect(wrapper.find('h1').text()).toBe('Client-Server');
   });
 
   it('displays todos fetched from the API', async () => {
