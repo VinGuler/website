@@ -11,6 +11,11 @@ This document outlines the expected workflow for AI agents interacting with and 
 
 ## Workflow Steps
 
+### 0. Task Initialization
+
+- **Load Task**: Upon receiving a task, the agent will expect a corresponding task definition file at `ai/tasks/{task-name}_task.md`. This file will contain the detailed instructions for the task.
+- **Initialize Progress**: Create an empty `ai/tasks/{task-name}_progress.md` file to log continuous progress.
+
 ### 1. Understand the Request
 
 - **Analyze**: Carefully read and understand the user's request. Identify the core objective, scope, and any explicit constraints or preferences.
@@ -33,6 +38,10 @@ This document outlines the expected workflow for AI agents interacting with and 
 - **Turborepo Configuration**: If adding new tasks or optimizing existing ones, update `turbo.json` with correct `dependsOn` relationships.
 - **Atomic Changes**: Prefer smaller, focused changes.
 
+### Progress Tracking
+
+- **Update Progress**: Regularly update `ai/tasks/{task-name}_progress.md` with details of actions taken, progress made, and any challenges encountered. This ensures continuity and transparency.
+
 ### 4. Verify the Changes
 
 - **Unit/Integration Tests**: Run existing tests or execute newly created tests to verify the correctness of the implementation. Identify test commands by examining `package.json` scripts or `vitest.config.ts`.
@@ -42,7 +51,8 @@ This document outlines the expected workflow for AI agents interacting with and 
 ### 5. Finalize and Report
 
 - **Confirm Completion**: Ensure all subtasks are marked as complete.
-- **Summarize (if requested)**: Provide a concise summary of the work done, especially for complex tasks.
+- **Generate Summary**: Create `ai/tasks/{task-name}_summary.md` summarizing the work done, key decisions, and outcomes.
+- **Clean Up**: Delete the `ai/tasks/{task-name}_task.md` and `ai/tasks/{task-name}_progress.md` files.
 - **Await Next Instruction**: Indicate readiness for the next task.
 
 ## Global Skills (Executable Capabilities)
