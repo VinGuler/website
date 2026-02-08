@@ -237,9 +237,9 @@ AI agents can leverage the following operational workflows:
 
 - **Purpose**: Run unit and integration tests using Vitest.
 - **Usage**:
-  - `pnpm run test` (all tests)
-  - `pnpm run test:<project-name>` (specific project, e.g., `test:api-server`)
-  - `pnpm run test:coverage`
+  - `pnpm run test` (all tests, database container is automatically managed)
+  - `pnpm run test:<project-name>` (specific project, database container is automatically managed)
+  - `pnpm run test:coverage` (with coverage, database container is automatically managed)
 - **Notes**: Vitest for unit/integration; Playwright for E2E (conceptual). Husky pre-push hook integration.
 
 ### Smart Commit & Push
