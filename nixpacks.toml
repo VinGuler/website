@@ -2,7 +2,7 @@
 # Deploy from monorepo root (Root Directory should be empty in Railway)
 
 [phases.setup]
-nixPkgs = ["nodejs_20", "pnpm"]
+nixPkgs = ["nodejs_22", "pnpm"]
 
 [phases.install]
 dependsOn = ["setup"]
