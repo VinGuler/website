@@ -28,7 +28,7 @@
     "dev:template:client-server-database": "turbo dev --filter=client-server-database",
     "dev:template:landing-page": "turbo dev --filter=landing-page",
     "build": "turbo build",
-    "build:app:finance-tracker": "turbo db:generate --filter=finance-tracker && turbo build --filter=finance-tracker --env-mode=loose",
+    "build:app:finance-tracker": "turbo db:generate --filter=finance-tracker --env-mode=loose && turbo db:push --filter=finance-tracker --env-mode=loose && turbo build --filter=finance-tracker --env-mode=loose",
     "build:app:finance-tracker:railway": "cd apps/finance-tracker && pnpm run db:generate && cd ../.. && turbo build --filter=finance-tracker",
     "build:utils": "turbo build --filter=@workspace/utils",
     "build:database": "turbo build --filter=@workspace/database",
