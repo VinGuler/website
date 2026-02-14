@@ -3,7 +3,8 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build", "db:generate"],
-      "outputs": ["dist/**", "build/**"]
+      "outputs": ["dist/**", "build/**"],
+      "env": ["DATABASE_URL"]
     },
     "dev": {
       "cache": false,
@@ -21,7 +22,8 @@
       "dependsOn": ["^build"]
     },
     "db:generate": {
-      "cache": true
+      "cache": true,
+      "env": ["DATABASE_URL"]
     }
   }
 }
