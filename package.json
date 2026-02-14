@@ -36,6 +36,8 @@
     "test:client-server": "./change-db-state.sh --up && vitest --run --project client-server && ./change-db-state.sh --down || ./change-db-state.sh --down",
     "test:client-server-database": "./change-db-state.sh --up && vitest --run --project client-server-database && ./change-db-state.sh --down || ./change-db-state.sh --down",
     "test:database": "./change-db-state.sh --up && vitest --run --project database && ./change-db-state.sh --down || ./change-db-state.sh --down",
+    "dev:app:finance-tracker": "turbo dev --filter=finance-tracker",
+    "test:finance-tracker": "./change-db-state.sh --up && vitest --run --project finance-tracker && ./change-db-state.sh --down || ./change-db-state.sh --down",
     "lint": "turbo lint",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -53,7 +55,8 @@
       "esbuild",
       "@prisma/client",
       "@prisma/engines",
-      "prisma"
+      "prisma",
+      "bcrypt"
     ]
   },
   "devDependencies": {
@@ -68,6 +71,7 @@
     "globals": "^15.14.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
+    "playwright": "^1.58.2",
     "prettier": "^3.4.2",
     "turbo": "^2.8.3",
     "typescript": "^5.9.3",

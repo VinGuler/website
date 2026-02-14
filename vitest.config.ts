@@ -17,6 +17,7 @@ export default defineConfig({
       'templates/client-server/vitest.config.ts',
       'templates/client-server-database/vitest.config.ts',
       'packages/database/vitest.config.ts',
+      'apps/finance-tracker/vitest.config.ts',
     ],
   },
 });

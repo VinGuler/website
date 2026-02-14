@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Permission {
+  OWNER
+  MEMBER
+  VIEWER
+}
+
+enum ItemType {
+  INCOME
+  CREDIT_CARD
+  LOAN_PAYMENT
+  RENT
+  OTHER
+}
+
+model User {
+  id           Int             @id @default(autoincrement())
+  username     String          @unique
+  displayName  String          @map("display_name")
+  passwordHash String          @map("password_hash")
+  createdAt    DateTime        @default(now()) @map("created_at")
+  updatedAt    DateTime        @updatedAt @map("updated_at")
+  workspaces   WorkspaceUser[]
+
+  @@map("users")
+}
+
+model Workspace {
+  id              Int              @id @default(autoincrement())
+  balance         Decimal          @default(0) @db.Decimal(12, 2)
+  cycleStartDay   Int?             @map("cycle_start_day")
+  cycleEndDay     Int?             @map("cycle_end_day")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  users           WorkspaceUser[]
+  items           Item[]
+  completedCycles CompletedCycle[]
+
+  @@map("workspaces")
+}
+
+model WorkspaceUser {
+  userId      Int        @map("user_id")
+  workspaceId Int        @map("workspace_id")
+  permission  Permission @default(VIEWER)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@id([userId, workspaceId])
+  @@map("workspace_users")
+}
+
+model Item {
+  id          Int       @id @default(autoincrement())
+  workspaceId Int       @map("workspace_id")
+  type        ItemType
+  label       String
+  amount      Decimal   @db.Decimal(12, 2)
+  dayOfMonth  Int       @map("day_of_month")
+  isPaid      Boolean   @default(false) @map("is_paid")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@map("items")
+}
+
+model CompletedCycle {
+  id            Int       @id @default(autoincrement())
+  workspaceId   Int       @map("workspace_id")
+  cycleLabel    String    @map("cycle_label")
+  finalBalance  Decimal   @map("final_balance") @db.Decimal(12, 2)
+  itemsSnapshot Json      @map("items_snapshot")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  workspace     Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@map("completed_cycles")
+}
