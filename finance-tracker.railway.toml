@@ -1,15 +1,17 @@
 [build]
-builder = "RAILPACK"
-# Crucial: Keep root at / so all node_modules are accessible
-rootDirectory = "/"
+builder = "NIXPACKS"
 
-[build.setup]
-# 1. Install everything
-# 2. Generate the client from the app's schema
-# 3. This makes the types available for the shared packages to use
-commands = [
-  "pnpm install",
-  "pnpm --filter finance-tracker db:generate"
+[build.nixpacksPlan.phases.setup]
+# This is the "Nixpacks" way to ensure these run FIRST
+nixPkgs = ["nodejs_22", "pnpm"]
+cmds = ["pnpm install"]
+
+[build.nixpacksPlan.phases.build]
+# Run Prisma generate and then your build script
+dependsOn = ["setup"]
+cmds = [
+  "pnpm --filter finance-tracker exec prisma generate",
+  "pnpm build:app:finance-tracker"
 ]
 
 [deploy]
