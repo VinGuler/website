@@ -259,3 +259,4 @@ Personas define specialized AI identities for sub-agents, focusing their experti
 - Railway deploys multiple services from `/apps` within a single project.
 - Subdomain routing: `https://<app-name>.yourdomain.com`.
 - Railway manages DB provisioning (Postgres) and environment variables.
+- For detailed configuration, advanced troubleshooting, and monorepo-specific setup, refer to the [Railway Advanced Deployment Guide](RAILWAY_ADVANCED_DEPLOYMENT.md).
