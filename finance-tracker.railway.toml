@@ -9,7 +9,7 @@ rootDirectory = "/"
 # 3. This makes the types available for the shared packages to use
 commands = [
   "pnpm install",
-  "pnpm --filter finance-tracker exec prisma generate"
+  "pnpm --filter finance-tracker db:generate"
 ]
 
 [deploy]
