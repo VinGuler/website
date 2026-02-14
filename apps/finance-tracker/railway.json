@@ -1,0 +1,14 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "cd ../.. && pnpm install --frozen-lockfile && cd apps/finance-tracker && pnpm run db:generate && pnpm run build",
+    "watchPatterns": ["apps/finance-tracker/**", "packages/**"]
+  },
+  "deploy": {
+    "startCommand": "node dist/server/index.js",
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10,
+    "healthcheckPath": "/api/health",
+    "healthcheckTimeout": 100
+  }
+}

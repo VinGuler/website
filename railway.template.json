@@ -1,0 +1,16 @@
+{
+  "_comment": "Template railway.json for deploying apps from this monorepo",
+  "_instructions": "1. Copy this file to apps/<your-app>/railway.json, 2. Update APP_NAME placeholder, 3. Adjust paths if needed",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "cd ../.. && pnpm install --frozen-lockfile && cd apps/APP_NAME && pnpm run db:generate && pnpm run build",
+    "watchPatterns": ["apps/APP_NAME/**", "packages/**"]
+  },
+  "deploy": {
+    "startCommand": "node dist/server/index.js",
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10,
+    "healthcheckPath": "/api/health",
+    "healthcheckTimeout": 100
+  }
+}
