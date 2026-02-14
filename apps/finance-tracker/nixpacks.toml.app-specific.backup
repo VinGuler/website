@@ -1,10 +1,11 @@
-# Nixpacks configuration for Railway monorepo deployment
-# Deploy from monorepo root (Root Directory should be empty in Railway)
+# Nixpacks configuration for Railway
+# Configures pnpm for monorepo workspace support and prevents npm usage
 
 [phases.setup]
 nixPkgs = ["nodejs_20", "pnpm"]
 
 [phases.install]
+# Install all workspace dependencies
 dependsOn = ["setup"]
 cmds = ["pnpm install --frozen-lockfile"]
 

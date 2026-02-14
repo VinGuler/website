@@ -59,9 +59,9 @@ workspace/
    | `NODE_ENV`     | `production`                 | Optional                                     |
 
 4. **Configure Service Settings**
-   - **Root Directory**: `apps/finance-tracker`
-   - **Build Command**: Handled by `railway.json` in app directory
-   - **Start Command**: Handled by `railway.json` in app directory
+   - **Root Directory**: Leave **empty** (deploy from monorepo root)
+   - **Build Command**: Handled by `nixpacks.toml`
+   - **Start Command**: Handled by `nixpacks.toml`
    - **Watch Paths**: Handled by `railway.json` (app + packages)
 
 5. **Deploy**
@@ -97,59 +97,52 @@ railway up
 
 ## Deploying Multiple Apps
 
-To add a new app to Railway:
+**Current Setup**: Single `railway.json` + `nixpacks.toml` at root for finance-tracker.
 
-1. **Copy the configuration templates**:
+To add more apps, you'll need to:
 
-   ```bash
-   cp railway.template.json apps/your-new-app/railway.json
-   cp nixpacks.toml apps/your-new-app/nixpacks.toml
+1. **Create separate Railway services** (one per app)
+2. **Update `nixpacks.toml`** to build the target app:
+
+   ```toml
+   [phases.build]
+   cmds = [
+     "cd apps/your-new-app",
+     "pnpm run build"
+   ]
+
+   [start]
+   cmd = "cd apps/your-new-app && pnpm start"
    ```
 
-2. **Update watchPatterns in railway.json**:
+3. **Update `railway.json` watchPatterns** to watch the new app
 
-   ```json
-   // In apps/your-new-app/railway.json
-   "watchPatterns": ["apps/your-new-app/**", "packages/**"]
-   ```
-
-   No need to change buildCommand - it works as-is!
-
-3. **Create a new Railway Service**:
-   - Go to your Railway Project
-   - Click "New" → "GitHub Repo" (same repo)
-   - Set **Root Directory**: `apps/your-new-app`
-   - Railway will auto-detect both `railway.json` and `nixpacks.toml`
-
-4. **Configure environment variables** (per service)
-
-5. **Deploy** - Each service deploys independently with pnpm ✅
+**Note**: For multi-app monorepos, consider using Railway's CLI to create separate services with different configurations, or create separate railway config files and specify which to use via environment variables.
 
 **Result**: Multiple apps in one Railway Project, sharing the monorepo but deployed separately.
 
 ## Configuration Files
 
-### `apps/<app-name>/railway.json`
+### `railway.json` (root)
 
-Per-app configuration file:
+Monorepo-level Railway configuration:
 
-- Specifies build/deploy commands from app directory
-- Configures healthcheck endpoint
-- Sets watch patterns (triggers rebuild on changes to app or packages)
+- Sets watch patterns to trigger rebuilds on app/package changes
+- Configures healthcheck endpoint and restart policy
+- Railway reads this from the repository root
+
+### `nixpacks.toml` (root)
+
+Nixpacks build configuration:
+
+- Installs pnpm via Nix packages (avoids npm entirely)
+- Runs `pnpm install` from monorepo root (supports `workspace:*`)
+- Builds the finance-tracker app (`cd apps/finance-tracker && pnpm run build`)
+- Starts the app (`cd apps/finance-tracker && pnpm start`)
 
 ### `railway.template.json`
 
-Template for creating new apps. Copy to each new app directory.
-
-### `nixpacks.toml` (per-app)
-
-**Important**: Each app needs its own `nixpacks.toml` in `apps/<app-name>/`:
-
-- Railway reads this from the Root Directory setting
-- Installs pnpm via Nix packages (avoids npm entirely)
-- Prevents `workspace:*` protocol errors
-- Runs `pnpm install` from monorepo root for all workspace dependencies
-- Copy from root `nixpacks.toml` template when creating new apps
+Legacy template - not currently used with root-based deployment
 
 ### `package.json` (root)
 
@@ -285,38 +278,27 @@ Railway pricing: https://railway.app/pricing
 - Free tier: $5 credit/month
 - Typical finance-tracker usage: ~$5-10/month (Hobby plan)
 
-## Quick Reference: Multi-App Workflow
+## Quick Reference: Deployment
 
 ```bash
-# 1. Create a new app in the monorepo
-cd apps
-cp -r ../templates/client-server-database my-new-app
+# Current setup: Deploy finance-tracker from monorepo root
 
-# 2. Set up Railway config files
-cp ../railway.template.json my-new-app/railway.json
-cp ../nixpacks.toml my-new-app/nixpacks.toml
+# 1. In Railway Dashboard:
+#    - Root Directory: (empty)
+#    - Connects to main branch
+#    - Reads railway.json and nixpacks.toml from root
 
-# 3. Update watchPatterns in railway.json
-# Edit: apps/my-new-app/railway.json
-# Change "apps/APP_NAME/**" to "apps/my-new-app/**"
+# 2. Environment Variables:
+railway variables set JWT_SECRET=$(openssl rand -base64 32)
+railway variables set NODE_ENV=production
 
-# 4. Commit and push
-git add apps/my-new-app
-git commit -m "feat: add my-new-app"
-git push
+# 3. Deploy:
+git push  # Auto-deploys on push to main
 
-# 5. Deploy to Railway
-# Option A: Via Dashboard
-#   - Go to Railway Project → New → GitHub Repo (same repo)
-#   - Set Root Directory: apps/my-new-app
-#   - Add environment variables
-#   - Deploy
-
-# Option B: Via CLI
-railway init
-railway service add --name my-new-app --root apps/my-new-app
-railway variables set JWT_SECRET=<secret>
-railway up
+# To deploy a different app:
+# - Update nixpacks.toml [phases.build] and [start] sections
+# - Update railway.json watchPatterns
+# - Commit and push
 ```
 
 **Result**: Each app deploys independently with its own:
