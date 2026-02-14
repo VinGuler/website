@@ -1,8 +1,9 @@
 # Nixpacks configuration for Railway monorepo deployment
 # Deploy from monorepo root (Root Directory should be empty in Railway)
+# Node version specified in .node-version file
 
 [phases.setup]
-nixPkgs = ["nodejs_22", "pnpm"]
+nixPkgs = ["pnpm"]
 
 [phases.install]
 dependsOn = ["setup"]
