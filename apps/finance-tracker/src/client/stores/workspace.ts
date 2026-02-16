@@ -4,30 +4,14 @@ import { api } from '@/composables/useApi';
 import { i18n } from '@/i18n';
 import type { WorkspaceData, Item, Permission, BalanceCards, CreateItemData } from '@/types';
 import { ITEM_TYPE_IS_INCOME } from '@/types';
-
-function buildCycleLabel(startDay: number, endDay: number): string {
-  const locale = i18n.global.locale.value;
-  const now = new Date();
-  const month = now.getMonth();
-  const year = now.getFullYear();
-
-  const startDate = new Date(year, month, startDay);
-  const fmt = new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric' });
-
-  if (endDay > startDay) {
-    const endDate = new Date(year, month, endDay);
-    return `${fmt.format(startDate)} - ${fmt.format(endDate)}`;
-  } else {
-    const endDate = new Date(year, month + 1, endDay);
-    return `${fmt.format(startDate)} - ${fmt.format(endDate)}`;
-  }
-}
+import { buildCycleLabel } from '@/utils';
 
 export const useWorkspaceStore = defineStore('workspace', () => {
   const workspace = ref<WorkspaceData | null>(null);
   const loading = ref(false);
   const updating = ref(false);
   const error = ref<string | null>(null);
+  const rawCycleLabel = ref<string | null>(null);
 
   const items = computed<Item[]>(() => workspace.value?.items ?? []);
 
@@ -53,13 +37,8 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   const balanceCards = computed<BalanceCards | null>(() => workspace.value?.balanceCards ?? null);
 
   const cycleLabel = computed(() => {
-    const ws = workspace.value;
-    if (!ws) return null;
-    const { cycleStartDay, cycleEndDay } = ws.workspace;
-    if (cycleStartDay != null && cycleEndDay != null) {
-      return buildCycleLabel(cycleStartDay, cycleEndDay);
-    }
-    return ws.cycleLabel ?? null;
+    if (!rawCycleLabel.value) return '';
+    return buildCycleLabel(rawCycleLabel.value, i18n.global.locale.value);
   });
 
   async function fetchWorkspace(workspaceId?: string) {
@@ -71,6 +50,8 @@ export const useWorkspaceStore = defineStore('workspace', () => {
 
     if (result.success && result.data) {
       workspace.value = result.data;
+
+      rawCycleLabel.value = result.data.cycleLabel;
     } else {
       error.value = result.error || 'Failed to load workspace';
     }

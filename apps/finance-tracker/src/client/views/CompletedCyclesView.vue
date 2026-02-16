@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { api } from '@/composables/useApi';
 import ItemList from '@/components/ItemList.vue';
 import type { CompletedCycle } from '@/types';
+import { formatAmount, formatDate } from '@/utils';
 
 const { t, locale } = useI18n();
 
@@ -41,11 +42,12 @@ function calculateBalanceCards(cycle: CompletedCycle) {
   };
 }
 
-function formatDate(dateString: string): string {
-  const date = new Date(dateString);
+function formatCycleLabel(cycleLabel: string): string {
+  // Parse "YYYY-MM" format
+  const [year, month] = cycleLabel.split('-').map(Number);
+  const date = new Date(year!, month! - 1);
   return date.toLocaleDateString(locale.value, {
-    month: 'short',
-    day: 'numeric',
+    month: 'long',
     year: 'numeric',
   });
 }
@@ -106,9 +108,11 @@ onMounted(() => {
       >
         <!-- Cycle header -->
         <div class="mb-4 pb-4 border-b border-slate-800">
-          <h2 class="text-xl font-semibold text-slate-100 mb-1">{{ cycle.cycleLabel }}</h2>
+          <h2 class="text-xl font-semibold text-slate-100 mb-1">
+            {{ formatCycleLabel(cycle.cycleLabel) }}
+          </h2>
           <p class="text-xs text-slate-500">
-            {{ t('cycles.completedOn', { date: formatDate(cycle.createdAt) }) }}
+            {{ t('cycles.completedOn', { date: formatDate(cycle.createdAt, locale) }) }}
           </p>
         </div>
 
@@ -119,7 +123,7 @@ onMounted(() => {
               {{ t('cycles.finalBalance') }}
             </div>
             <div class="text-2xl font-bold text-slate-200 tabular-nums">
-              {{ calculateBalanceCards(cycle).finalBalance.toFixed(2) }}
+              {{ formatAmount(calculateBalanceCards(cycle).finalBalance, locale) }}
             </div>
           </div>
 
@@ -128,7 +132,7 @@ onMounted(() => {
               {{ t('cycles.totalIncome') }}
             </div>
             <div class="text-2xl font-bold text-emerald-400 tabular-nums">
-              {{ calculateBalanceCards(cycle).totalIncome.toFixed(2) }}
+              {{ formatAmount(calculateBalanceCards(cycle).totalIncome, locale) }}
             </div>
           </div>
 
@@ -137,7 +141,7 @@ onMounted(() => {
               {{ t('cycles.totalPayments') }}
             </div>
             <div class="text-2xl font-bold text-rose-400 tabular-nums">
-              {{ calculateBalanceCards(cycle).totalPayments.toFixed(2) }}
+              {{ formatAmount(calculateBalanceCards(cycle).totalPayments, locale) }}
             </div>
           </div>
         </div>

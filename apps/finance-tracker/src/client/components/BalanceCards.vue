@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatAmount } from '@/utils';
 import { useI18n } from 'vue-i18n';
 
 const { t, locale } = useI18n();
@@ -13,13 +14,6 @@ defineProps<{
 defineEmits<{
   'update-balance': [];
 }>();
-
-function formatNumber(value: number): string {
-  return new Intl.NumberFormat(locale.value, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(value);
-}
 </script>
 
 <template>
@@ -28,7 +22,9 @@ function formatNumber(value: number): string {
     <div class="bg-emerald-950/40 border border-emerald-800/40 rounded-xl p-4">
       <p class="text-sm font-medium text-emerald-400 mb-1">{{ t('balance.current') }}</p>
       <div class="flex items-center gap-2">
-        <p class="text-2xl font-bold text-emerald-300">{{ formatNumber(currentBalance) }}</p>
+        <p class="text-2xl font-bold text-emerald-300">
+          {{ formatAmount(currentBalance, locale) }}
+        </p>
         <button
           v-if="canEdit"
           class="text-emerald-500 hover:text-emerald-300 transition-colors"
@@ -50,7 +46,7 @@ function formatNumber(value: number): string {
     <!-- Expected Balance -->
     <div class="bg-sky-950/40 border border-sky-800/40 rounded-xl p-4">
       <p class="text-sm font-medium text-sky-400 mb-1">{{ t('balance.expected') }}</p>
-      <p class="text-2xl font-bold text-sky-300">{{ formatNumber(expectedBalance) }}</p>
+      <p class="text-2xl font-bold text-sky-300">{{ formatAmount(expectedBalance, locale) }}</p>
     </div>
 
     <!-- Deficit / Excess -->
@@ -71,7 +67,7 @@ function formatNumber(value: number): string {
         {{ deficitExcess >= 0 ? t('balance.surplus') : t('balance.deficit') }}
       </p>
       <p :class="['text-2xl font-bold', deficitExcess >= 0 ? 'text-emerald-300' : 'text-rose-300']">
-        {{ formatNumber(Math.abs(deficitExcess)) }}
+        {{ formatAmount(Math.abs(deficitExcess), locale) }}
       </p>
     </div>
   </div>

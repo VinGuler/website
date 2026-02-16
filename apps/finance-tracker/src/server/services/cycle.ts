@@ -74,37 +74,39 @@ export function calculateBalanceCards(
  * If endDay > startDay, both dates are in the same month.
  * If endDay <= startDay, the cycle wraps into the next month.
  */
-export function buildCycleLabel(
+export function buildWorkspaceCycleLabel(
   startDay: number,
   endDay: number,
   referenceDate: Date = new Date()
 ): string {
-  const monthNames = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-  const month = referenceDate.getMonth();
+  let month = referenceDate.getMonth() + 1;
+  const currentDay = referenceDate.getDate();
 
-  const startMonth = monthNames[month];
+  // If we're past the cycle end day, move to next month
+  // For same-month cycles (endDay > startDay): check if currentDay > endDay
+  // For wrapped cycles (endDay <= startDay): only increment if currentDay is in the gap (< startDay AND > endDay)
+  const cycleWraps = endDay <= startDay;
+  const shouldIncrementMonth = cycleWraps
+    ? currentDay > endDay && currentDay < startDay
+    : currentDay > endDay;
+
+  if (shouldIncrementMonth) {
+    month = (month % 12) + 1;
+  }
 
   if (endDay > startDay) {
     // Same month: "Mar 5 - Mar 20"
-    return `${startMonth} ${startDay} - ${startMonth} ${endDay}`;
+    return `${month}-${startDay}_${month}-${endDay}`;
   } else {
     // Wraps: "Jan 25 - Feb 16"
-    const nextMonth = monthNames[(month + 1) % 12];
-    return `${startMonth} ${startDay} - ${nextMonth} ${endDay}`;
+    const nextMonth = (month + 1) % 12;
+    return `${month}-${startDay}_${nextMonth}-${endDay}`;
   }
+}
+
+export function buildCycleLabel(date: Date = new Date()): string {
+  const cycleLabel = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+  return cycleLabel;
 }
 
 /**
@@ -147,7 +149,7 @@ export async function archiveCycleIfNeeded(
     if (!pastEnd) return false;
 
     // Archive the completed cycle
-    const cycleLabel = buildCycleLabel(workspace.cycle_start_day, cycleEndDay, today);
+    const cycleLabel = buildCycleLabel(today);
 
     await tx.completedCycle.create({
       data: {

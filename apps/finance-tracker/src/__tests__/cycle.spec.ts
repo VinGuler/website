@@ -3,6 +3,7 @@ import {
   calculateCycleDays,
   calculateBalanceCards,
   buildCycleLabel,
+  buildWorkspaceCycleLabel,
 } from '../server/services/cycle';
 
 describe('calculateCycleDays', () => {
@@ -102,23 +103,45 @@ describe('calculateBalanceCards', () => {
 });
 
 describe('buildCycleLabel', () => {
-  it('same month: "Mar 5 - Mar 20"', () => {
-    const ref = new Date(2026, 2, 10); // March
-    expect(buildCycleLabel(5, 20, ref)).toBe('Mar 5 - Mar 20');
+  it('returns YYYY-MM format for a given date', () => {
+    const date = new Date(2026, 0, 15); // January 2026
+    expect(buildCycleLabel(date)).toBe('2026-01');
   });
 
-  it('wrapping: "Jan 25 - Feb 16"', () => {
-    const ref = new Date(2026, 0, 28); // January
-    expect(buildCycleLabel(25, 16, ref)).toBe('Jan 25 - Feb 16');
+  it('pads single-digit months with zero', () => {
+    const date = new Date(2025, 8, 5); // September 2025
+    expect(buildCycleLabel(date)).toBe('2025-09');
+  });
+
+  it('handles December correctly', () => {
+    const date = new Date(2026, 11, 31); // December 2026
+    expect(buildCycleLabel(date)).toBe('2026-12');
+  });
+});
+
+describe('buildWorkspaceCycleLabel', () => {
+  it('same month: "3-5_3-20"', () => {
+    const ref = new Date(2026, 2, 10); // March, day 10
+    expect(buildWorkspaceCycleLabel(5, 20, ref)).toBe('3-5_3-20');
+  });
+
+  it('wrapping: "1-25_2-16"', () => {
+    const ref = new Date(2026, 0, 28); // January, day 28
+    expect(buildWorkspaceCycleLabel(25, 16, ref)).toBe('1-25_2-16');
   });
 
   it('December wrapping to January', () => {
-    const ref = new Date(2026, 11, 28); // December
-    expect(buildCycleLabel(25, 16, ref)).toBe('Dec 25 - Jan 16');
+    const ref = new Date(2026, 11, 28); // December, day 28
+    expect(buildWorkspaceCycleLabel(25, 16, ref)).toBe('12-25_1-16');
   });
 
-  it('same day start and end', () => {
-    const ref = new Date(2026, 5, 15); // June
-    expect(buildCycleLabel(15, 15, ref)).toBe('Jun 15 - Jul 15');
+  it('increments month when current day is past end day', () => {
+    const ref = new Date(2026, 2, 25); // March 25
+    expect(buildWorkspaceCycleLabel(5, 20, ref)).toBe('4-5_4-20');
+  });
+
+  it('handles end of year month increment', () => {
+    const ref = new Date(2026, 11, 20); // December 20
+    expect(buildWorkspaceCycleLabel(5, 15, ref)).toBe('1-5_1-15');
   });
 });

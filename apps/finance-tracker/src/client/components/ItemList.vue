@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Item } from '@/types';
 import { ITEM_TYPE_IS_INCOME } from '@/types';
+import { formatAmount } from '@/utils';
 
 const { t, locale } = useI18n();
 
@@ -18,13 +19,6 @@ defineEmits<{
 }>();
 
 const sortedItems = computed(() => [...props.items].sort((a, b) => Number(a.id) - Number(b.id)));
-
-function formatAmount(value: number): string {
-  return new Intl.NumberFormat(locale.value, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(value);
-}
 
 function typeBadgeClass(type: Item['type']): string {
   if (ITEM_TYPE_IS_INCOME[type]) {
@@ -133,7 +127,7 @@ function isOverdue(item: Item): boolean {
             item.isPaid ? 'line-through opacity-50' : '',
           ]"
         >
-          {{ ITEM_TYPE_IS_INCOME[item.type] ? '+' : '-' }}{{ formatAmount(item.amount) }}
+          {{ ITEM_TYPE_IS_INCOME[item.type] ? '+' : '-' }}{{ formatAmount(item.amount, locale) }}
         </span>
 
         <!-- Day badge -->

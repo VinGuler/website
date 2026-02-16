@@ -1,7 +1,12 @@
 import { Router } from 'express';
 import { PrismaClient } from '@workspace/database';
 import { requireAuth } from '../middleware/auth.js';
-import { calculateCycleDays, calculateBalanceCards, buildCycleLabel } from '../services/cycle.js';
+import {
+  calculateCycleDays,
+  calculateBalanceCards,
+  buildCycleLabel,
+  buildWorkspaceCycleLabel,
+} from '../services/cycle.js';
 import { archiveCycleIfNeeded } from '../services/cycle.js';
 import type { WorkspaceResponse } from '../types.js';
 
@@ -49,7 +54,7 @@ export function workspaceRouter(prisma: PrismaClient): Router {
     }
 
     // Archive completed cycle if needed
-    await archiveCycleIfNeeded(prisma, workspaceId);
+    // await archiveCycleIfNeeded(prisma, workspaceId);
 
     // Fetch workspace with items
     const workspace = await prisma.workspace.findUnique({
@@ -92,10 +97,11 @@ export function workspaceRouter(prisma: PrismaClient): Router {
 
     const balanceCards = calculateBalanceCards(balance, itemsForCalc);
 
-    const cycleLabel =
-      cycleDays.cycleStartDay !== null && cycleDays.cycleEndDay !== null
-        ? buildCycleLabel(cycleDays.cycleStartDay, cycleDays.cycleEndDay)
-        : null;
+    const cycleLabel = buildWorkspaceCycleLabel(
+      cycleDays.cycleStartDay ?? 1,
+      cycleDays.cycleEndDay ?? 1,
+      new Date()
+    );
 
     const response: WorkspaceResponse = {
       workspace: {
@@ -238,24 +244,15 @@ export function workspaceRouter(prisma: PrismaClient): Router {
       const workspace = await tx.workspace.findUnique({ where: { id: workspaceId } });
       const items = await tx.item.findMany({ where: { workspaceId } });
 
-      const now = new Date();
       await tx.completedCycle.create({
         data: {
           workspaceId,
           finalBalance: workspace?.balance ?? 0,
-          cycleLabel: `${now.getMonth()} ${now.getFullYear()}`,
+          cycleLabel: buildCycleLabel(new Date()),
           itemsSnapshot: items,
         },
       });
       await tx.item.updateMany({ where: { workspaceId }, data: { isPaid: false } });
-      await tx.workspace.update({
-        where: { id: workspaceId },
-        data: {
-          balance: 0,
-          cycleStartDay: null,
-          cycleEndDay: null,
-        },
-      });
     });
 
     res.json({ success: true });

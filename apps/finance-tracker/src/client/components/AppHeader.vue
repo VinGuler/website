@@ -39,16 +39,16 @@ function toggleLocale() {
               >{{ t('nav.myWorkspace') }}</RouterLink
             >
             <RouterLink
-              to="/shared"
-              class="text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors"
-              active-class="!text-violet-400"
-              >{{ t('nav.shared') }}</RouterLink
-            >
-            <RouterLink
               to="/cycles"
               class="text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors"
               active-class="!text-violet-400"
               >{{ t('nav.completedCycles') }}</RouterLink
+            >
+            <RouterLink
+              to="/shared"
+              class="text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors"
+              active-class="!text-violet-400"
+              >{{ t('nav.shared') }}</RouterLink
             >
           </nav>
         </div>
