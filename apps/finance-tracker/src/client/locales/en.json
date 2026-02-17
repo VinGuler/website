@@ -109,7 +109,11 @@
     "finalBalance": "Final Balance",
     "totalIncome": "Total Income",
     "totalPayments": "Total Payments",
-    "items": "Items"
+    "items": "Items",
+    "deleteCycle": "Delete cycle",
+    "deleteCycleTitle": "Delete Cycle?",
+    "deleteCycleDescription": "This completed cycle will be permanently deleted. This action cannot be undone.",
+    "deleteConfirm": "Delete"
   },
   "common": {
     "cancel": "Cancel",

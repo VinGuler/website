@@ -109,7 +109,11 @@
     "finalBalance": "יתרה סופית",
     "totalIncome": "הכנסה כוללת",
     "totalPayments": "סה\"כ תשלומים",
-    "items": "פריטים"
+    "items": "פריטים",
+    "deleteCycle": "מחק מחזור",
+    "deleteCycleTitle": "למחוק מחזור?",
+    "deleteCycleDescription": "המחזור שהושלם יימחק לצמיתות. לא ניתן לבטל פעולה זו.",
+    "deleteConfirm": "מחק"
   },
   "common": {
     "cancel": "ביטול",

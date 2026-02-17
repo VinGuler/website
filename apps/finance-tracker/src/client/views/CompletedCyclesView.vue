@@ -11,6 +11,9 @@ const { t, locale } = useI18n();
 const cycles = ref<CompletedCycle[]>([]);
 const loading = ref(false);
 const error = ref<string | null>(null);
+const deletingCycleId = ref<string | null>(null);
+const showDeleteConfirm = ref(false);
+const cycleToDelete = ref<CompletedCycle | null>(null);
 
 async function fetchCycles() {
   loading.value = true;
@@ -50,6 +53,35 @@ function formatCycleLabel(cycleLabel: string): string {
     month: 'long',
     year: 'numeric',
   });
+}
+
+function promptDelete(cycle: CompletedCycle) {
+  cycleToDelete.value = cycle;
+  showDeleteConfirm.value = true;
+}
+
+function cancelDelete() {
+  showDeleteConfirm.value = false;
+  cycleToDelete.value = null;
+}
+
+async function confirmDelete() {
+  if (!cycleToDelete.value) return;
+
+  const id = cycleToDelete.value.id;
+  deletingCycleId.value = id;
+  showDeleteConfirm.value = false;
+
+  const result = await api(`/api/workspace/cycles/${id}`, { method: 'DELETE' });
+
+  if (result.success) {
+    cycles.value = cycles.value.filter((c) => c.id !== id);
+  } else {
+    error.value = result.error || 'Failed to delete cycle';
+  }
+
+  deletingCycleId.value = null;
+  cycleToDelete.value = null;
 }
 
 const isEmpty = computed(() => cycles.value.length === 0);
@@ -105,15 +137,41 @@ onMounted(() => {
         v-for="cycle in cycles"
         :key="cycle.id"
         class="bg-slate-900 border border-slate-800 rounded-xl p-6"
+        :class="{ 'opacity-50 pointer-events-none': deletingCycleId === cycle.id }"
       >
         <!-- Cycle header -->
-        <div class="mb-4 pb-4 border-b border-slate-800">
-          <h2 class="text-xl font-semibold text-slate-100 mb-1">
-            {{ formatCycleLabel(cycle.cycleLabel) }}
-          </h2>
-          <p class="text-xs text-slate-500">
-            {{ t('cycles.completedOn', { date: formatDate(cycle.createdAt, locale) }) }}
-          </p>
+        <div class="mb-4 pb-4 border-b border-slate-800 flex items-start justify-between">
+          <div>
+            <h2 class="text-xl font-semibold text-slate-100 mb-1">
+              {{ formatCycleLabel(cycle.cycleLabel) }}
+            </h2>
+            <p class="text-xs text-slate-500">
+              {{ t('cycles.completedOn', { date: formatDate(cycle.createdAt, locale) }) }}
+            </p>
+          </div>
+          <button
+            :title="t('cycles.deleteCycle')"
+            class="p-2 text-slate-500 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition-colors"
+            @click="promptDelete(cycle)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="3 6 5 6 21 6" />
+              <path
+                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+              />
+              <line x1="10" y1="11" x2="10" y2="17" />
+              <line x1="14" y1="11" x2="14" y2="17" />
+            </svg>
+          </button>
         </div>
 
         <!-- Balance cards -->
@@ -155,5 +213,37 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
+    <!-- Delete confirmation modal -->
+    <Teleport to="body">
+      <div
+        v-if="showDeleteConfirm"
+        class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4"
+        @click.self="cancelDelete"
+      >
+        <div class="bg-slate-900 border border-slate-700 rounded-xl p-6 max-w-sm w-full">
+          <h3 class="text-lg font-semibold text-slate-100 mb-2">
+            {{ t('cycles.deleteCycleTitle') }}
+          </h3>
+          <p class="text-sm text-slate-400 mb-6">
+            {{ t('cycles.deleteCycleDescription') }}
+          </p>
+          <div class="flex gap-3 justify-end">
+            <button
+              class="px-4 py-2 text-sm text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
+              @click="cancelDelete"
+            >
+              {{ t('common.cancel') }}
+            </button>
+            <button
+              class="px-4 py-2 text-sm text-white bg-rose-600 hover:bg-rose-500 rounded-lg transition-colors"
+              @click="confirmDelete"
+            >
+              {{ t('cycles.deleteConfirm') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>

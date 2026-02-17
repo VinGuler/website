@@ -210,6 +210,41 @@ export function workspaceRouter(prisma: PrismaClient): Router {
     res.json({ success: true, data: formattedCycles });
   });
 
+  // DELETE /api/workspace/cycles/:id — delete a completed cycle
+  router.delete('/cycles/:id', async (req, res) => {
+    const userId = req.user!.id;
+    const cycleId = parseInt(req.params.id, 10);
+
+    if (isNaN(cycleId)) {
+      res.status(400).json({ success: false, error: 'Invalid cycle ID' });
+      return;
+    }
+
+    // Find user's OWNER workspace
+    const ownerEntry = await prisma.workspaceUser.findFirst({
+      where: { userId, permission: 'OWNER' },
+    });
+
+    if (!ownerEntry) {
+      res.status(404).json({ success: false, error: 'No workspace found' });
+      return;
+    }
+
+    // Verify the cycle belongs to the user's workspace
+    const cycle = await prisma.completedCycle.findUnique({
+      where: { id: cycleId },
+    });
+
+    if (!cycle || cycle.workspaceId !== ownerEntry.workspaceId) {
+      res.status(404).json({ success: false, error: 'Cycle not found' });
+      return;
+    }
+
+    await prisma.completedCycle.delete({ where: { id: cycleId } });
+
+    res.json({ success: true });
+  });
+
   // POST /api/workspace/reset — delete all items, reset balance to 0, clear cycle days
   router.post('/reset', async (req, res) => {
     const userId = req.user!.id;
