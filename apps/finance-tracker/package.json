@@ -18,6 +18,8 @@
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push --accept-data-loss",
     "db:deploy": "prisma migrate deploy",
+    "db:baseline": "prisma migrate resolve --applied 20260214145419_init || true && prisma migrate resolve --applied 20260217191731_add_token_version || true",
+    "db:setup": "pnpm db:baseline && pnpm db:deploy",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio"
   },
