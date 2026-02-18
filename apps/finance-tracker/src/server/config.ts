@@ -21,7 +21,10 @@ export const EMAIL_ENCRYPTION_KEY =
   process.env.EMAIL_ENCRYPTION_KEY ||
   '0000000000000000000000000000000000000000000000000000000000000000';
 
-// SMTP
+// Resend HTTP API (preferred — avoids SMTP port-blocking on Railway)
+export const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+
+// SMTP fallback (used only when RESEND_API_KEY is not set)
 export const SMTP_HOST = process.env.SMTP_HOST || 'localhost';
 export const SMTP_PORT = parseInt(process.env.SMTP_PORT || '587', 10);
 export const SMTP_USER = process.env.SMTP_USER || '';
