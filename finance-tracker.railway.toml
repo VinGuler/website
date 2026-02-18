@@ -15,4 +15,4 @@ commands = [
 [deploy]
 buildCommand = "pnpm build:app:finance-tracker"
 startCommand = "pnpm start:app:finance-tracker"
-preDeployCommand = "pnpm --filter finance-tracker exec prisma db push"
+preDeployCommand = "pnpm --filter finance-tracker db:deploy"
