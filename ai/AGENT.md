@@ -17,6 +17,8 @@ The `workspace` monorepo is an app factory designed for rapidly building, testin
 - **Backend**: Node.js + Express.
 - **Database/ORM**: PostgreSQL with Prisma.
 - **Language**: TypeScript (end-to-end type safety).
+- **Security**: AES-256-GCM + HMAC for encryption, password policy hardening.
+- **Email**: Nodemailer for email services.
 - **Tooling**: ESLint, Prettier, Vitest, Husky.
 - **Package Manager**: pnpm.
 - **Build System**: Turborepo.
@@ -60,6 +62,12 @@ These constraints govern design and implementation within the monorepo.
 
 - **Railway-First**: Designed for deployment on Railway (monorepo integration, auto-deployments, subdomain routing).
 - **Containerization**: Production deployments leverage Docker.
+
+### Security Considerations
+
+- **Encryption**: AES-256-GCM with HMAC for encrypting sensitive user data (e.g., email addresses).
+- **Password Policy**: Enforced password complexity (minimum 8 characters, mixed case, at least one digit).
+- **Password Reset**: Secure, token-based email password reset flow to prevent unauthorized access.
 
 ## 3. Coding Standards
 

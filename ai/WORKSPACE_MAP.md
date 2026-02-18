@@ -6,7 +6,7 @@ This document provides a live overview of the `workspace` monorepo's application
 
 ### Applications (`apps/`)
 
-- Currently empty. New applications are scaffolded from templates into this directory.
+- `finance-tracker` (Full Stack + DB): Vue 3 + Vite + Express v5 + Prisma + PostgreSQL, with email-based password reset, password policy hardening, and AES-256-GCM+HMAC encryption. 55 tests passing.
 
 ### Templates (`templates/`)
 
