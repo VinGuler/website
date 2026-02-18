@@ -21,6 +21,10 @@ const __dirname = dirname(__filename);
 const app: Express = express();
 const PORT = process.env.PORT || 3010;
 
+// Trust the first proxy (Railway, nginx, etc.) so express-rate-limit
+// reads the real client IP from X-Forwarded-For instead of the proxy IP.
+app.set('trust proxy', 1);
+
 // Database setup
 const DB_NAME = 'finance_tracker_db';
 const databaseUrl = process.env.DATABASE_URL ?? getDatabaseUrl(DB_NAME);
