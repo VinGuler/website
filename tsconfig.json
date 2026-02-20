@@ -18,6 +18,7 @@
     { "path": "./templates/client-server-database" },
     { "path": "./packages/utils" },
     { "path": "./packages/database" },
+    { "path": "./packages/login" },
     { "path": "./apps/finance-tracker" }
   ]
 }

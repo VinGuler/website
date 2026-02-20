@@ -26,8 +26,17 @@ const PORT = process.env.PORT || 3010;
 app.set('trust proxy', 1);
 
 // Database setup
-const DB_NAME = 'finance_tracker_db';
-const databaseUrl = process.env.DATABASE_URL ?? getDatabaseUrl(DB_NAME);
+const DB_NAME = process.env.DATABASE_NAME;
+const databaseUrl = process.env.DATABASE_URL ?? (DB_NAME ? getDatabaseUrl(DB_NAME) : '');
+
+if (!databaseUrl) {
+  log(
+    'error',
+    'finance-tracker',
+    'Database URL is not configured. Set DATABASE_URL or DATABASE_NAME environment variable.'
+  );
+  process.exit(1);
+}
 const prisma = createClient(databaseUrl);
 
 // Security middleware

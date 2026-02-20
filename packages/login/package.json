@@ -1,0 +1,56 @@
+{
+  "name": "@workspace/login",
+  "version": "1.0.0",
+  "description": "Reusable authentication package for the workspace monorepo",
+  "type": "module",
+  "private": true,
+  "main": "dist/server/index.js",
+  "types": "dist/server/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/server/index.d.ts",
+      "import": "./dist/server/index.js"
+    },
+    "./server": {
+      "types": "./dist/server/index.d.ts",
+      "import": "./dist/server/index.js"
+    },
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "import": "./dist/client/index.js"
+    },
+    "./views/*": "./src/client/views/*"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.server.json && vue-tsc -p tsconfig.client.json",
+    "dev": "tsc -p tsconfig.server.json --watch",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "express-rate-limit": "^8.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^8.0.1"
+  },
+  "peerDependencies": {
+    "express": "^5.0.1",
+    "pinia": "^3.0.4",
+    "vue": "^3.5.0",
+    "vue-i18n": "10",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^5.0.6",
+    "@types/express-serve-static-core": "^5.1.1",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^24.10.4",
+    "@types/nodemailer": "^7.0.10",
+    "pinia": "^3.0.4",
+    "typescript": "~5.9.3",
+    "vue": "^3.5.26",
+    "vue-i18n": "10",
+    "vue-router": "^4.5.1",
+    "vue-tsc": "^3.2.2"
+  }
+}
