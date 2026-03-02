@@ -28,6 +28,9 @@ local_query.pgsql
 
 *.tsbuildinfo
 
+# Prisma generated clients
+**/src/generated
+
 .eslintcache
 
 # Cypress

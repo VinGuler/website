@@ -15,17 +15,32 @@ get_container_status() {
   docker inspect -f '{{.State.Status}}' "$CONTAINER_NAME" 2>/dev/null
 }
 
+wait_for_ready() {
+  local retries=30
+  for i in $(seq 1 $retries); do
+    if docker exec "$CONTAINER_NAME" pg_isready -U "$DB_USER" -q 2>/dev/null; then
+      log "Database is ready."
+      return 0
+    fi
+    sleep 0.2
+  done
+  log "Database did not become ready in time."
+  return 1
+}
+
 action=$1
 
 if [ "$action" == "--up" ]; then
   status=$(get_container_status)
   if [ "$status" == "running" ]; then
     log "Database container '$CONTAINER_NAME' is already running."
+    wait_for_ready
   elif [ "$status" == "exited" ]; then
     log "Database container '$CONTAINER_NAME' found but stopped. Starting it..."
     docker start "$CONTAINER_NAME"
     if [ $? -eq 0 ]; then
       log "Database container '$CONTAINER_NAME' started successfully."
+      wait_for_ready
     else
       log "Error starting database container '$CONTAINER_NAME'."
       exit 1
@@ -40,6 +55,7 @@ if [ "$action" == "--up" ]; then
       "$IMAGE_NAME"
     if [ $? -eq 0 ]; then
       log "Database container '$CONTAINER_NAME' created and started successfully."
+      wait_for_ready
     else
       log "Error creating and starting database container '$CONTAINER_NAME'."
       exit 1

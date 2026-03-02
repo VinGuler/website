@@ -1,5 +1,5 @@
 import { Router, type RequestHandler } from 'express';
-import { PrismaClient } from '@workspace/database';
+import { PrismaClient } from '../../generated/prisma/index.js';
 import { strictParseInt } from '../utils/parseId.js';
 
 export function sharingRouter(prisma: PrismaClient, userSearchLimiter: RequestHandler): Router {

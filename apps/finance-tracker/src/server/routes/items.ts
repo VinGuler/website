@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { PrismaClient } from '@workspace/database';
+import { PrismaClient } from '../../generated/prisma/index.js';
 import { calculateCycleDays } from '../services/cycle.js';
 import { strictParseInt } from '../utils/parseId.js';
 

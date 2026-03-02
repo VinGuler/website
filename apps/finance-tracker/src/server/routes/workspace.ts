@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { PrismaClient } from '@workspace/database';
+import { PrismaClient } from '../../generated/prisma/index.js';
 import {
   calculateCycleDays,
   calculateBalanceCards,

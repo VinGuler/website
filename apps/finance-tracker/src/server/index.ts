@@ -7,6 +7,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { log } from '@workspace/utils';
 import { getDatabaseUrl, createClient, checkHealth } from '@workspace/database';
+import { PrismaClient } from '../generated/prisma/index.js';
 import {
   authRouter,
   userRouter,
@@ -43,7 +44,7 @@ if (!databaseUrl) {
   );
   process.exit(1);
 }
-const prisma = createClient(databaseUrl);
+const prisma = createClient(databaseUrl, PrismaClient);
 
 // Auth setup
 const repo = createAuthRepository(prisma);

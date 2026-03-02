@@ -4,6 +4,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { log } from '@workspace/utils';
 import { getDatabaseUrl, createClient, checkHealth } from '@workspace/database';
+import { PrismaClient } from '../generated/prisma/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,7 +15,7 @@ const PORT = process.env.PORT || 3003;
 // Database setup
 const DB_NAME = 'client_server_database_db';
 const databaseUrl = process.env.DATABASE_URL ?? getDatabaseUrl(DB_NAME);
-const prisma = createClient(databaseUrl);
+const prisma = createClient(databaseUrl, PrismaClient);
 
 // Middleware
 app.use(express.json());

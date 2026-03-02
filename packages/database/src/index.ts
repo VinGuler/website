@@ -1,6 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
+/** Minimal interface for any PrismaClient instance (base or app-specific). */
+export interface PrismaClientLike {
+  $queryRaw: (query: TemplateStringsArray, ...values: unknown[]) => Promise<unknown>;
+  $disconnect: () => Promise<void>;
+}
+
 /**
  * Loads the base database URL from environment variables.
  * The base URL contains host, port, user, and password but no database name.
@@ -33,26 +39,36 @@ export function getDatabaseUrl(dbName: string, baseUrl?: string): string {
 }
 
 // Store client instances per database URL for singleton pattern
-const clients = new Map<string, PrismaClient>();
+ 
+const clients = new Map<string, any>();
 
 /**
  * Creates or retrieves a singleton PrismaClient for the given database URL.
  * Uses the Prisma PostgreSQL driver adapter (Prisma 7+).
  *
+ * Pass an app-specific PrismaClient class (generated with a custom `output` path)
+ * to get full model type safety. When omitted, falls back to the base @prisma/client.
+ *
  * @param databaseUrl - Full PostgreSQL connection string including database name
+ * @param ClientClass - Optional app-specific PrismaClient constructor
  * @returns A PrismaClient instance
  */
-export function createClient(databaseUrl: string): PrismaClient {
+export function createClient<T extends PrismaClientLike = PrismaClient>(
+  databaseUrl: string,
+   
+  ClientClass?: new (opts: any) => T
+): T {
   const existing = clients.get(databaseUrl);
   if (existing) {
-    return existing;
+    return existing as T;
   }
 
   const adapter = new PrismaPg({ connectionString: databaseUrl });
-  const client = new PrismaClient({ adapter });
+  const Cls = ClientClass ?? PrismaClient;
+  const client = new Cls({ adapter });
 
   clients.set(databaseUrl, client);
-  return client;
+  return client as T;
 }
 
 /**
@@ -60,7 +76,7 @@ export function createClient(databaseUrl: string): PrismaClient {
  *
  * @param client - The PrismaClient instance to disconnect
  */
-export async function disconnect(client: PrismaClient): Promise<void> {
+export async function disconnect(client: PrismaClientLike): Promise<void> {
   await client.$disconnect();
 
   for (const [url, cached] of clients.entries()) {
@@ -76,7 +92,9 @@ export async function disconnect(client: PrismaClient): Promise<void> {
  * Useful for graceful shutdown.
  */
 export async function disconnectAll(): Promise<void> {
-  const promises = Array.from(clients.values()).map((client) => client.$disconnect());
+  const promises = Array.from(clients.values()).map((client: PrismaClientLike) =>
+    client.$disconnect()
+  );
   await Promise.all(promises);
   clients.clear();
 }
@@ -87,7 +105,7 @@ export async function disconnectAll(): Promise<void> {
  * @param client - The PrismaClient instance to check
  * @returns true if the database is reachable, false otherwise
  */
-export async function checkHealth(client: PrismaClient): Promise<boolean> {
+export async function checkHealth(client: PrismaClientLike): Promise<boolean> {
   try {
     await client.$queryRaw`SELECT 1`;
     return true;
@@ -106,3 +124,5 @@ export function clearClientCache(): void {
 
 // Re-export PrismaClient type for convenience
 export { PrismaClient };
+// Re-export adapter for apps that create their own client
+export { PrismaPg };

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@workspace/database';
+import { PrismaClient } from '../../generated/prisma/index.js';
 import type { BalanceCards } from '../types.js';
 
 interface CycleDays {

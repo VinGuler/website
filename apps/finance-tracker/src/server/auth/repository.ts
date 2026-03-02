@@ -1,4 +1,4 @@
-import type { PrismaClient } from '@workspace/database';
+import type { PrismaClient } from '../../generated/prisma/index.js';
 import type {
   AuthRepository,
   AuthUser,

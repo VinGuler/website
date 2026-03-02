@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@prisma/client": "^7.3.0",
+    "@prisma/client-runtime-utils": "^7.4.2",
     "@workspace/database": "workspace:*",
     "@workspace/login": "workspace:*",
     "@workspace/utils": "workspace:*",
