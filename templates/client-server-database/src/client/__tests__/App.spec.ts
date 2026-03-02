@@ -2,10 +2,31 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
+import { createRouter, createMemoryHistory } from 'vue-router';
+import { createI18n } from 'vue-i18n';
 import App from '../App.vue';
+import en from '../locales/en.json';
 
 const mockFetch = vi.fn();
 vi.stubGlobal('fetch', mockFetch);
+
+function createTestRouter() {
+  return createRouter({
+    history: createMemoryHistory(),
+    routes: [
+      { path: '/', component: { template: '<div class="home">Home</div>' } },
+      { path: '/login', component: { template: '<div class="login">Login</div>' } },
+    ],
+  });
+}
+
+function createTestI18n() {
+  return createI18n({
+    legacy: false,
+    locale: 'en',
+    messages: { en },
+  });
+}
 
 beforeEach(() => {
   setActivePinia(createPinia());
@@ -13,63 +34,20 @@ beforeEach(() => {
 });
 
 describe('App', () => {
-  it('renders the heading', () => {
-    mockFetch.mockResolvedValueOnce({
-      json: () => Promise.resolve({ success: true, data: [] }),
+  it('mounts and hides header when not authenticated', () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      json: () => Promise.resolve({ success: false }),
     });
 
-    const wrapper = mount(App);
-    expect(wrapper.find('h1').text()).toBe('Client-Server-Database');
-  });
-
-  it('displays todos fetched from the API', async () => {
-    mockFetch.mockResolvedValueOnce({
-      json: () =>
-        Promise.resolve({
-          success: true,
-          data: [
-            { id: 1, text: 'Learn TypeScript', completed: true, createdAt: '', updatedAt: '' },
-            { id: 2, text: 'Build an app', completed: false, createdAt: '', updatedAt: '' },
-          ],
-        }),
+    const wrapper = mount(App, {
+      global: {
+        plugins: [createTestRouter(), createTestI18n()],
+      },
     });
 
-    const wrapper = mount(App);
-    await vi.waitFor(() => {
-      expect(wrapper.findAll('.todo-list li')).toHaveLength(2);
-    });
-
-    const items = wrapper.findAll('.todo-list li');
-    expect(items[0].text()).toContain('Learn TypeScript');
-    expect(items[1].text()).toContain('Build an app');
-  });
-
-  it('adds a new todo via the form', async () => {
-    mockFetch
-      .mockResolvedValueOnce({
-        json: () => Promise.resolve({ success: true, data: [] }),
-      })
-      .mockResolvedValueOnce({
-        json: () =>
-          Promise.resolve({
-            success: true,
-            data: { id: 1, text: 'New task', completed: false, createdAt: '', updatedAt: '' },
-          }),
-      });
-
-    const wrapper = mount(App);
-    await vi.waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledTimes(1);
-    });
-
-    const input = wrapper.find('input[type="text"]');
-    await input.setValue('New task');
-    await wrapper.find('form').trigger('submit');
-
-    await vi.waitFor(() => {
-      expect(wrapper.findAll('.todo-list li')).toHaveLength(1);
-    });
-
-    expect(wrapper.find('.todo-list li').text()).toContain('New task');
+    expect(wrapper.find('.app').exists()).toBe(true);
+    // Header should be hidden when not authenticated
+    expect(wrapper.find('.app-header').exists()).toBe(false);
   });
 });

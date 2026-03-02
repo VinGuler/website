@@ -1,160 +1,89 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useTodoStore } from './stores/todos';
+import { useAuthStore } from '@/stores/auth';
+import { useI18n } from 'vue-i18n';
 import logo from './assets/logo.png';
 
-const store = useTodoStore();
-const newTodoText = ref('');
-
-onMounted(() => {
-  store.fetchTodos();
-});
-
-async function handleAdd() {
-  const text = newTodoText.value.trim();
-  if (!text) return;
-  await store.addTodo(text);
-  newTodoText.value = '';
-}
+const auth = useAuthStore();
+const { t } = useI18n();
 </script>
 
 <template>
   <div class="app">
-    <header class="app-header">
-      <img :src="logo" alt="Logo" class="logo" />
-      <h1>Client-Server-Database</h1>
-      <p class="description">Full-stack app with Vue 3 client, Express API server, and database</p>
+    <header v-if="auth.isAuthenticated" class="app-header">
+      <div class="header-left">
+        <img :src="logo" alt="Logo" class="logo" />
+        <h1>Client-Server-Database</h1>
+      </div>
+      <div class="header-right">
+        <span class="user-name">{{ auth.user?.displayName }}</span>
+        <button class="logout-btn" @click="auth.logout()">{{ t('nav.logout') }}</button>
+      </div>
     </header>
 
-    <form class="add-form" @submit.prevent="handleAdd">
-      <input
-        v-model="newTodoText"
-        type="text"
-        placeholder="What needs to be done?"
-        aria-label="New todo text"
-      />
-      <button type="submit">Add</button>
-    </form>
-
-    <p v-if="store.error" class="error">{{ store.error }}</p>
-    <p v-if="store.loading" class="loading">Loading...</p>
-
-    <ul v-if="store.todos.length" class="todo-list">
-      <li v-for="todo in store.todos" :key="todo.id" :class="{ completed: todo.completed }">
-        <label>
-          <input type="checkbox" :checked="todo.completed" @change="store.toggleTodo(todo.id)" />
-          <span>{{ todo.text }}</span>
-        </label>
-        <button class="delete-btn" aria-label="Delete" @click="store.deleteTodo(todo.id)">
-          &times;
-        </button>
-      </li>
-    </ul>
-    <p v-else-if="!store.loading" class="empty">No todos yet. Add one above!</p>
+    <main class="main-content">
+      <RouterView />
+    </main>
   </div>
 </template>
 
 <style scoped>
 .app {
-  max-width: 480px;
-  margin: 2rem auto;
+  max-width: 640px;
+  margin: 0 auto;
   font-family: system-ui, sans-serif;
 }
 
 .app-header {
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-.logo {
-  width: 64px;
-  height: 64px;
-}
-
-h1 {
-  margin: 0.5rem 0 0.25rem;
-}
-
-.description {
-  color: #666;
-  font-size: 0.9rem;
-  margin: 0 0 1rem;
-}
-
-.add-form {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.add-form input {
-  flex: 1;
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.add-form button {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-  border: none;
-  border-radius: 4px;
-  background: #4a90d9;
-  color: white;
-}
-
-.add-form button:hover {
-  background: #357abd;
-}
-
-.error {
-  color: #d32f2f;
-  text-align: center;
-}
-
-.loading,
-.empty {
-  text-align: center;
-  color: #888;
-}
-
-.todo-list {
-  list-style: none;
-  padding: 0;
-}
-
-.todo-list li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem;
+  padding: 1rem 0;
   border-bottom: 1px solid #eee;
+  margin-bottom: 1.5rem;
 }
 
-.todo-list li label {
+.header-left {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
+  gap: 0.75rem;
 }
 
-.todo-list li.completed span {
-  text-decoration: line-through;
-  color: #999;
+.logo {
+  width: 32px;
+  height: 32px;
 }
 
-.delete-btn {
-  background: none;
-  border: none;
+h1 {
+  margin: 0;
   font-size: 1.25rem;
-  color: #999;
-  cursor: pointer;
-  padding: 0 0.25rem;
 }
 
-.delete-btn:hover {
-  color: #d32f2f;
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-name {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.logout-btn {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  color: #333;
+}
+
+.logout-btn:hover {
+  background: #f5f5f5;
+}
+
+.main-content {
+  padding: 1rem 0;
 }
 </style>
