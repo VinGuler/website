@@ -1,2 +1,2 @@
 @import 'tailwindcss';
-@source "../../../node_modules/@workspace/login/src/client/views";
+@source "../../node_modules/@workspace/login/src/client/views";
