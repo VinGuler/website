@@ -1,4 +1,6 @@
-import { PrismaClient } from '@prisma/client';
+// Note: We don't import PrismaClient directly from @prisma/client here
+// because this is a shared package that should work with different
+// app-specific generated clients.
 import { PrismaPg } from '@prisma/adapter-pg';
 
 /** Minimal interface for any PrismaClient instance (base or app-specific). */
@@ -39,7 +41,6 @@ export function getDatabaseUrl(dbName: string, baseUrl?: string): string {
 }
 
 // Store client instances per database URL for singleton pattern
- 
 const clients = new Map<string, any>();
 
 /**
@@ -47,16 +48,15 @@ const clients = new Map<string, any>();
  * Uses the Prisma PostgreSQL driver adapter (Prisma 7+).
  *
  * Pass an app-specific PrismaClient class (generated with a custom `output` path)
- * to get full model type safety. When omitted, falls back to the base @prisma/client.
+ * to get full model type safety.
  *
  * @param databaseUrl - Full PostgreSQL connection string including database name
- * @param ClientClass - Optional app-specific PrismaClient constructor
+ * @param ClientClass - App-specific PrismaClient constructor
  * @returns A PrismaClient instance
  */
-export function createClient<T extends PrismaClientLike = PrismaClient>(
+export function createClient<T extends PrismaClientLike>(
   databaseUrl: string,
-   
-  ClientClass?: new (opts: any) => T
+  ClientClass: new (opts: any) => T
 ): T {
   const existing = clients.get(databaseUrl);
   if (existing) {
@@ -64,11 +64,10 @@ export function createClient<T extends PrismaClientLike = PrismaClient>(
   }
 
   const adapter = new PrismaPg({ connectionString: databaseUrl });
-  const Cls = ClientClass ?? PrismaClient;
-  const client = new Cls({ adapter });
+  const client = new ClientClass({ adapter });
 
   clients.set(databaseUrl, client);
-  return client as T;
+  return client;
 }
 
 /**
@@ -122,7 +121,5 @@ export function clearClientCache(): void {
   clients.clear();
 }
 
-// Re-export PrismaClient type for convenience
-export { PrismaClient };
 // Re-export adapter for apps that create their own client
 export { PrismaPg };

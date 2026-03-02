@@ -76,29 +76,35 @@ describe('getDatabaseUrl', () => {
   });
 });
 
+class MockClient {
+  constructor(public opts: any) {}
+  $queryRaw = async () => [1];
+  $disconnect = async () => {};
+}
+
 describe('createClient', () => {
-  it('should create a PrismaClient instance', () => {
-    const client = createClient(TEST_DB_URL);
+  it('should create a client instance', () => {
+    const client = createClient(TEST_DB_URL, MockClient);
     expect(client).toBeDefined();
-    expect(typeof client.$connect).toBe('function');
+    expect(client instanceof MockClient).toBe(true);
   });
 
   it('should return the same instance for the same URL (singleton)', () => {
-    const client1 = createClient(TEST_DB_URL);
-    const client2 = createClient(TEST_DB_URL);
+    const client1 = createClient(TEST_DB_URL, MockClient);
+    const client2 = createClient(TEST_DB_URL, MockClient);
     expect(client1).toBe(client2);
   });
 
   it('should return different instances for different URLs', () => {
-    const client1 = createClient(TEST_DB_URL);
-    const client2 = createClient(TEST_DB_URL + '?schema=other');
+    const client1 = createClient(TEST_DB_URL, MockClient);
+    const client2 = createClient(TEST_DB_URL + '?schema=other', MockClient);
     expect(client1).not.toBe(client2);
   });
 });
 
 describe('checkHealth', () => {
   it('should return true for a healthy database', async () => {
-    const client = createClient(TEST_DB_URL);
+    const client = createClient(TEST_DB_URL, MockClient);
     const healthy = await checkHealth(client);
     expect(healthy).toBe(true);
   });
@@ -106,24 +112,24 @@ describe('checkHealth', () => {
 
 describe('disconnect', () => {
   it('should disconnect a client and remove it from cache', async () => {
-    const client = createClient(TEST_DB_URL);
+    const client = createClient(TEST_DB_URL, MockClient);
     await disconnect(client);
 
     // After disconnect, creating again should return a new instance
-    const newClient = createClient(TEST_DB_URL);
+    const newClient = createClient(TEST_DB_URL, MockClient);
     expect(newClient).not.toBe(client);
   });
 });
 
 describe('disconnectAll', () => {
   it('should disconnect all cached clients', async () => {
-    createClient(TEST_DB_URL);
-    createClient(TEST_DB_URL + '?schema=test');
+    createClient(TEST_DB_URL, MockClient);
+    createClient(TEST_DB_URL + '?schema=test', MockClient);
 
     await disconnectAll();
 
     // After disconnectAll, new clients should be created
-    const fresh = createClient(TEST_DB_URL);
+    const fresh = createClient(TEST_DB_URL, MockClient);
     expect(fresh).toBeDefined();
   });
 });
