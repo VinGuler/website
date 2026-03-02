@@ -9,7 +9,7 @@
     "dev:server": "tsx watch --clear-screen=false src/server/index.ts",
     "dev:client": "vite",
     "build": "prisma generate && run-p build:server build:client",
-    "build:server": "tsc -p tsconfig.server.json",
+    "build:server": "tsc -p tsconfig.server.json && cp -r src/generated dist/generated",
     "build:client": "vite build",
     "start": "node dist/server/index.js",
     "test": "vitest run",
