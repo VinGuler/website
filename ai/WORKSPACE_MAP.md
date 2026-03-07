@@ -7,6 +7,7 @@ This document provides a live overview of the `workspace` monorepo's application
 ### Applications (`apps/`)
 
 - `finance-tracker` (Full Stack + DB): Vue 3 + Vite + Express v5 + Prisma + PostgreSQL, with email-based password reset, password policy hardening, and AES-256-GCM+HMAC encryption. 55 tests passing.
+- `job-tracker` (Full Stack + DB): ApplyFlow — Kanban-based job application tracker. Vue 3 + Vite + Express v5 + Prisma + PostgreSQL. Dark blue/white theme. Client port 5181, server port 3011, DB `job_tracker_db`. Auth via `@workspace/login` (jt_csrf). Models: User, Application (6 statuses), Stage. 17 tests passing.
 
 ### Templates (`templates/`)
 

@@ -43,6 +43,7 @@ export default defineConfig({
         },
       },
       'apps/finance-tracker/vitest.config.ts',
+      'apps/job-tracker/vitest.config.ts',
     ],
   },
 });

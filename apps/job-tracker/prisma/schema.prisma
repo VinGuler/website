@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ApplicationStatus {
+  APPLIED
+  IN_PROGRESS
+  OFFER
+  REJECTED
+  GHOSTED
+  ARCHIVED
+}
+
+model User {
+  id             Int                  @id @default(autoincrement())
+  username       String               @unique
+  displayName    String               @map("display_name")
+  passwordHash   String               @map("password_hash")
+  tokenVersion   Int                  @default(0) @map("token_version")
+  emailHash      String?              @unique @map("email_hash")
+  emailEncrypted String?              @map("email_encrypted")
+  applications   Application[]
+  resetTokens    PasswordResetToken[]
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model PasswordResetToken {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  tokenHash String    @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model Application {
+  id          Int               @id @default(autoincrement())
+  userId      Int               @map("user_id")
+  companyName String            @map("company_name")
+  role        String
+  status      ApplicationStatus @default(APPLIED)
+  salaryRange String?           @map("salary_range")
+  jobLink     String?           @map("job_link")
+  companyUrl  String?           @map("company_url")
+  description String?
+  position    Int               @default(0)
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stages      Stage[]
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+
+  @@index([userId, status])
+  @@map("applications")
+}
+
+model Stage {
+  id            Int         @id @default(autoincrement())
+  applicationId Int         @map("application_id")
+  label         String
+  order         Int         @default(0)
+  isCompleted   Boolean     @default(false) @map("is_completed")
+  notes         String?
+  scheduledAt   DateTime?   @map("scheduled_at")
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  @@index([applicationId, order])
+  @@map("stages")
+}

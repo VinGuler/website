@@ -1,0 +1,14 @@
+[build]
+builder = "RAILPACK"
+rootDirectory = "/"
+
+[build.setup]
+commands = [
+  "pnpm install",
+  "pnpm --filter job-tracker db:generate"
+]
+
+[deploy]
+buildCommand = "pnpm build:app:job-tracker"
+startCommand = "pnpm start:app:job-tracker"
+preDeployCommand = "pnpm --filter job-tracker db:setup"

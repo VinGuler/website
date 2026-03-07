@@ -12,12 +12,20 @@ const serverApps = [
   'templates/api-server/**/*.ts',
   'packages/database/**/*.ts',
   'apps/finance-tracker/src/server/**/*.ts',
+  'apps/job-tracker/src/server/**/*.ts',
 ];
 
 export default [
   // Global ignores
   {
-    ignores: ['**/node_modules/**', '**/dist/**', '**/build/**', '**/coverage/**', '**/public/**'],
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/build/**',
+      '**/coverage/**',
+      '**/public/**',
+      '**/src/generated/**',
+    ],
   },
 
   // Base JS config
