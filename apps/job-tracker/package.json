@@ -19,7 +19,7 @@
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
-    "db:baseline": "prisma migrate resolve --applied 0001_init || true",
+    "db:baseline": "prisma migrate resolve --applied 20260307000000_init || true",
     "db:deploy": "prisma migrate deploy",
     "db:setup": "pnpm db:baseline && pnpm db:deploy"
   },
