@@ -16,12 +16,12 @@
     "lint": "eslint .",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:push": "prisma db push",
-    "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "prisma studio",
-    "db:baseline": "prisma migrate resolve --applied 20260307000000_init || true",
+    "db:push": "prisma db push --accept-data-loss",
     "db:deploy": "prisma migrate deploy",
-    "db:setup": "pnpm db:deploy"
+    "db:baseline": "prisma migrate resolve --applied 20260307000000_init || true",
+    "db:setup": "pnpm db:baseline && pnpm db:deploy",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
     "@prisma/client": "^7.3.0",
